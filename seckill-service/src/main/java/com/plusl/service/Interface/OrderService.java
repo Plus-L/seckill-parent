@@ -15,7 +15,7 @@ public interface OrderService {
 
     public OrderInfo getOrderById(long id);
 
-    public SeckillOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId);
+    public SeckillOrder getSeckillOrderByUserIdGoodsId(long userId, long goodsId);
 
     public OrderInfo createOrder(User user, GoodsVo goods);
 

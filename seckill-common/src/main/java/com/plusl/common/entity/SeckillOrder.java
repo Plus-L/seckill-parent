@@ -17,7 +17,7 @@ import org.apache.ibatis.type.Alias;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Alias("miaoshaorder")
+@Alias("seckillorder")
 public class SeckillOrder {
     private Long id;
     private Long userId;

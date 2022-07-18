@@ -1,11 +1,14 @@
 package com.plusl.web.controller;
 
 import com.plusl.common.entity.OrderInfo;
+import com.plusl.common.entity.SeckillOrder;
 import com.plusl.common.entity.User;
 import com.plusl.common.enums.result.Result;
+import com.plusl.common.enums.status.ResultStatus;
 import com.plusl.common.vo.GoodsVo;
 import com.plusl.common.vo.SeckillMessageVo;
 import com.plusl.service.GoodsService;
+import com.plusl.service.OrderService;
 import com.plusl.service.SeckillService;
 import com.plusl.service.redis.GoodsKey;
 import com.plusl.service.redis.RedisService;
@@ -33,7 +36,7 @@ import static com.plusl.common.enums.status.ResultStatus.MIAO_SHA_OVER;
  * @create: 2022-07-07 15:18
  **/
 @RestController
-@RequestMapping("/miaosha")
+@RequestMapping("/activity")
 public class SeckillController implements InitializingBean {
 
     @Autowired
@@ -48,6 +51,9 @@ public class SeckillController implements InitializingBean {
     @Autowired
     MqProducer mqProducer;
 
+    @Autowired
+    OrderService orderService;
+
     /**
      * redis停止请求标识
      */
@@ -61,17 +67,17 @@ public class SeckillController implements InitializingBean {
      * @return 规范化Json返回值
      */
     @RequireLogin(seconds = 5, maxCount = 1000, needLogin = false)
-    @RequestMapping(value = "/do_miaosha", method = RequestMethod.POST)
+    @RequestMapping(value = "/doseckill", method = RequestMethod.POST)
     public Result<OrderInfo> doSeckill(User user, @RequestParam("goodsId") long goodsId) {
 
         Result<OrderInfo> result = Result.build();
 
         //判断是否已经秒杀到了,防止重复秒杀
-/*        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(user.getId(), goodsId);
+        SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
         if (order != null) {
-            result.withError(ResultStatus.REPEATE_MIAOSHA);
+            result.withError(ResultStatus.REPEATE_SECKILL);
             return result;
-        }*/
+        }
 
         //内存标识符，防止库存结束后仍然查询redis
         Boolean isOver = localOverMap.get(goodsId);
@@ -81,7 +87,7 @@ public class SeckillController implements InitializingBean {
         }
 
         //预减库存
-        Long stock = redisService.decr(GoodsKey.getMiaoshaGoodsStock, "" + goodsId);
+        Long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + goodsId);
         if (stock < 0) {
             localOverMap.replace(goodsId, true);
             result.withError(EXCEPTION.getCode(), MIAO_SHA_OVER.getMessage());
@@ -97,12 +103,12 @@ public class SeckillController implements InitializingBean {
 
     @RequireLogin(seconds = 5, maxCount = 5, needLogin = false)
     @RequestMapping(value = "/result", method = RequestMethod.GET)
-    public Result<Long> miaoshaResult(Model model, User user,
-                                      @RequestParam("goodsId") long goodsId) {
+    public Result<Long> getSeckillResult(Model model, User user,
+                                         @RequestParam("goodsId") long goodsId) {
         Result<Long> result = Result.build();
         model.addAttribute("user", user);
-        Long miaoshaResult = sekcillService.getMiaoshaResult(user.getId(), goodsId);
-        result.setData(miaoshaResult);
+        Long seckillResult = sekcillService.getSeckillResult(user.getId(), goodsId);
+        result.setData(seckillResult);
         return result;
     }
 

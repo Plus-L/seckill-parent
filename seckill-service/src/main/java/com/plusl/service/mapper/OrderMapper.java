@@ -15,12 +15,12 @@ import java.util.List;
 @Mapper
 public interface OrderMapper {
 
-    SeckillOrder getMiaoshaOrderByUserIdGoodsId(@Param("userNickName") long userNickName,
+    SeckillOrder getSeckillOrderByUserIdGoodsId(@Param("userNickName") long userNickName,
                                                 @Param("goodsId") long goodsId);
 
     long insert(OrderInfo orderInfo);
 
-    int insertMiaoshaOrder(SeckillOrder seckillOrder);
+    int insertSeckillOrder(SeckillOrder seckillOrder);
 
     OrderInfo getOrderById(@Param("orderId") long orderId);
 

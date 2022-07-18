@@ -22,7 +22,7 @@ import java.util.Date;
 @Alias("goodsVo")
 public class GoodsVo extends Goods {
 
-    private Double miaoshaPrice;
+    private Double seckillPrice;
     private Integer stockCount;
     private Date startDate;
     private Date endDate;

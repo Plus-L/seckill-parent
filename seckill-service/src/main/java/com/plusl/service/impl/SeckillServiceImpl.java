@@ -7,7 +7,7 @@ import com.plusl.common.vo.GoodsVo;
 import com.plusl.service.GoodsService;
 import com.plusl.service.OrderService;
 import com.plusl.service.SeckillService;
-import com.plusl.service.redis.MiaoshaKey;
+import com.plusl.service.redis.SeckillKey;
 import com.plusl.service.redis.RedisService;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +48,8 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     @Override
-    public long getMiaoshaResult(Long userId, long goodsId) {
-        SeckillOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+    public long getSeckillResult(Long userId, long goodsId) {
+        SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(userId, goodsId);
         //秒杀成功
         if (order != null) {
             return order.getOrderId();
@@ -64,11 +64,11 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     private void setGoodsOver(Long goodsId) {
-        redisService.set(MiaoshaKey.isGoodsOver, "" + goodsId, true);
+        redisService.set(SeckillKey.isGoodsOver, "" + goodsId, true);
     }
 
     private boolean getGoodsOver(long goodsId) {
-        return redisService.exists(MiaoshaKey.isGoodsOver, "" + goodsId);
+        return redisService.exists(SeckillKey.isGoodsOver, "" + goodsId);
     }
 
 }

@@ -14,6 +14,6 @@ public interface SeckillService {
 
     public OrderInfo doSeckill(User user, GoodsVo goods);
 
-    public long getMiaoshaResult(Long userId, long goodsId);
+    public long getSeckillResult(Long userId, long goodsId);
 
 }

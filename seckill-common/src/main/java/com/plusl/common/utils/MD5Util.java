@@ -46,7 +46,7 @@ public class MD5Util {
      * @return
      */
     public static String formPassToDBPass(String formPass, String salt) {
-        String str = "" + salt.charAt(0) + salt.charAt(2) + formPass + salt.charAt(4) + salt.charAt(6);
+        String str = "" + salt.charAt(0) + salt.charAt(2) + formPass + salt.charAt(4) + salt.charAt(5);
         return MD5(str);
     }
 

@@ -8,8 +8,8 @@ package com.plusl.common.enums.status;
  **/
 
 public enum ResultStatus {
-    SUCCESS(0, "成功"),
-    FAILD(-1, "失败"),
+    SUCCESS(200, "成功"),
+    FAILD(400, "失败"),
     EXCEPTION(-1, "系统异常"),
     PARAM_ERROR(10000, "参数错误"),
     SYSTEM_ERROR(10001, "系统错误"),
@@ -54,7 +54,7 @@ public enum ResultStatus {
      * 秒杀模块
      */
     MIAO_SHA_OVER(40001, "商品已经秒杀完毕"),
-    REPEATE_MIAOSHA(40002, "不能重复秒杀"),
+    REPEATE_SECKILL(40002, "不能重复秒杀"),
     MIAOSHA_FAIL(40003, "秒杀失败");
 
 

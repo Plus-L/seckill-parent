@@ -37,8 +37,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public SeckillOrder getMiaoshaOrderByUserIdGoodsId(long userId, long goodsId) {
-        return orderMapper.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+    public SeckillOrder getSeckillOrderByUserIdGoodsId(long userId, long goodsId) {
+        return orderMapper.getSeckillOrderByUserIdGoodsId(userId, goodsId);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         orderInfo.setGoodsCount(1);
         orderInfo.setGoodsId(goods.getId());
         orderInfo.setGoodsName(goods.getGoodsName());
-        orderInfo.setGoodsPrice(goods.getMiaoshaPrice());
+        orderInfo.setGoodsPrice(goods.getSeckillPrice());
         orderInfo.setOrderChannel(1);
         orderInfo.setStatus(0);
         orderInfo.setUserId(user.getId());
@@ -61,9 +61,9 @@ public class OrderServiceImpl implements OrderService {
         seckillOrder.setGoodsId(goods.getId());
         seckillOrder.setOrderId(orderId);
         seckillOrder.setUserId(user.getId());
-        orderMapper.insertMiaoshaOrder(seckillOrder);
+        orderMapper.insertSeckillOrder(seckillOrder);
 
-        redisService.set(OrderKey.getMiaoshaOrderByUidGid, "" + user.getNickname() + "_" + goods.getId(), seckillOrder);
+        redisService.set(OrderKey.getSeckillOrderByUidGid, "" + user.getNickname() + "_" + goods.getId(), seckillOrder);
 
         return orderInfo;
     }

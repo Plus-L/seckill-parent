@@ -16,7 +16,7 @@
         <result column="pay_date" property="payDate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <resultMap id="BaseResultMapMiaoShaOrder" type="miaoshaorder">
+    <resultMap id="BaseResultMapSeckillOrder" type="seckillorder">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
         <result column="order_id" property="orderId" jdbcType="BIGINT"/>
@@ -28,14 +28,14 @@
     ,status,create_date,pay_date
     </sql>
 
-    <sql id="base_column_miaosha_order">
+    <sql id="base_column_seckill_order">
         id,user_id,goods_id,order_id
     </sql>
 
-    <select id="getMiaoshaOrderByUserIdGoodsId" resultMap="BaseResultMapMiaoShaOrder">
+    <select id="getSeckillOrderByUserIdGoodsId" resultMap="BaseResultMapSeckillOrder">
         select
-        <include refid="base_column_miaosha_order"/>
-        from miaosha_order where user_id=#{userNickName} and goods_id=#{goodsId}
+        <include refid="base_column_seckill_order"/>
+        from seckill_order where user_id=#{userNickName} and goods_id=#{goodsId}
     </select>
 
     <select id="getOrderById" resultMap="BaseResultMap">
@@ -44,15 +44,15 @@
         where id = #{orderId}
     </select>
 
-    <insert id="insert" parameterType="miaoshaorder" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="seckillorder" useGeneratedKeys="true" keyProperty="id">
         insert into order_info(user_id, goods_id, goods_name, goods_count, goods_price, order_channel, status,
                                create_date)
         values (#{userId}, #{goodsId}, #{goodsName}, #{goodsCount}, #{goodsPrice}, #{orderChannel}, #{status},
                 #{createDate})
     </insert>
 
-    <insert id="insertMiaoshaOrder" parameterType="OrderInfo" useGeneratedKeys="true" keyProperty="id">
-        insert into miaosha_order (user_id, goods_id, order_id)
+    <insert id="insertSeckillOrder" parameterType="OrderInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into seckill_order (user_id, goods_id, order_id)
         values (#{userId}, #{goodsId}, #{orderId})
     </insert>
 

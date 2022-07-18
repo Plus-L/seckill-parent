@@ -19,7 +19,7 @@ public interface UserMapper {
 
     public void update(User toBeUpdate);
 
-    public void insertMiaoShaUser(User miaoshaUser);
+    public void insertSeckillUser(User user);
 
     public int getCountByUserName(@Param("userName") String userName, @Param("userType") int userType);
 

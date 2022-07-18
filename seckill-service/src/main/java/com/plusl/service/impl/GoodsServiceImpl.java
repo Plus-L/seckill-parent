@@ -51,7 +51,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Result<GoodsVo> initSetGoodsMock(GoodsVo goodsVo) {
         Result<GoodsVo> result = Result.build();
-        boolean ok = redisService.set(GoodsKey.getMiaoshaGoodsStock, "" + goodsVo.getId(), goodsVo.getStockCount());
+        boolean ok = redisService.set(GoodsKey.getSeckillGoodsStock, "" + goodsVo.getId(), goodsVo.getStockCount());
         if (!ok) {
             result.withError(ResultStatus.REDIS_ERROR);
         } else {

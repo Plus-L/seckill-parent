@@ -18,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class GoodsDetailVo {
 
-    private int miaoshaStatus = 0;
+    private int seckillStatus = 0;
     private int remainSeconds = 0;
     private GoodsVo goods;
     private User user;

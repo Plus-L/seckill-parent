@@ -13,28 +13,28 @@
         <result column="stock_count" property="stockCount" jdbcType="BIGINT"/>
         <result column="start_date" property="startDate" jdbcType="TIMESTAMP"/>
         <result column="end_date" property="endDate" jdbcType="TIMESTAMP"/>
-        <result column="miaosha_price" property="miaoshaPrice" jdbcType="DOUBLE"/>
+        <result column="seckill_price" property="seckillPrice" jdbcType="DOUBLE"/>
     </resultMap>
 
     <sql id="base_column">
-        miaosha_goods.id as id, goods_name, goods_title, goods_img, goods_detail, goods_price, goods_stock,stock_count,start_date
-  	,end_date,miaosha_price
+        seckill_goods.id as id, goods_name, goods_title, goods_img, goods_detail, goods_price, goods_stock,stock_count,start_date
+  	,end_date,seckill_price
     </sql>
     <select id="listGoodsVo" resultMap="BaseResultMap">
         select
         <include refid="base_column"/>
-        from miaosha_goods left join goods on miaosha_goods.goods_id = goods.id
+        from seckill_goods left join goods on seckill_goods.goods_id = goods.id
     </select>
 
     <select id="getGoodsVoByGoodsId" resultMap="BaseResultMap">
         select
         <include refid="base_column"/>
-        from miaosha_goods left join goods on miaosha_goods.goods_id = goods.id
-        WHERE miaosha_goods.goods_id = #{goodsId,jdbcType=BIGINT}
+        from seckill_goods left join goods on seckill_goods.goods_id = goods.id
+        WHERE seckill_goods.goods_id = #{goodsId,jdbcType=BIGINT}
     </select>
 
     <update id="reduceStock">
-        update miaosha_goods
+        update seckill_goods
         set stock_count = stock_count - 1
         where goods_id = #{goodsId}
           and stock_count > 0

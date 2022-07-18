@@ -37,7 +37,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping("/loginin")
+    @RequestMapping("/do_login")
     @ResponseBody
     public Result<String> dologin(HttpServletResponse response, @Valid LoginVo loginVo) {
         Result<String> result = Result.build();

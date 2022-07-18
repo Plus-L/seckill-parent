@@ -19,7 +19,7 @@ public interface GoodsMapper {
      *
      * @return 商品信息列表
      */
-    public List<GoodsVo> listGoodsVo();
+    List<GoodsVo> listGoodsVo();
 
     /**
      * 通过ID获取商品信息
@@ -27,7 +27,7 @@ public interface GoodsMapper {
      * @param goodsId 商品ID
      * @return 商品对象
      */
-    public GoodsVo getGoodsVoByGoodsId(@Param("goodsId") long goodsId);
+    GoodsVo getGoodsVoByGoodsId(@Param("goodsId") long goodsId);
 
     /**
      * 减少库存
@@ -35,6 +35,6 @@ public interface GoodsMapper {
      * @param seckillGoods 消杀商品
      * @return 减少后的库存
      */
-    public int reduceStock(SeckillGoods seckillGoods);
+    int reduceStock(SeckillGoods seckillGoods);
 
 }

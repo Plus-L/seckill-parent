@@ -12,7 +12,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Alias("MiaoshaGoods")
+@Alias("SeckillGoods")
 public class SeckillGoods {
     private Long id;
     private Long goodsId;

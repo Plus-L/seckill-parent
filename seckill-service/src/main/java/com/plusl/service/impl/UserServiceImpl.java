@@ -55,8 +55,6 @@ public class UserServiceImpl implements UserService {
         }
 
         String dbPass = user.getPassword();
-//        String saltDb = user.getSalt();
-//        String calcPass = MD5Util.formPassToDBPass(password, saltDb);
         if (!password.equals(dbPass)) {
             throw new GlobalException(PASSWORD_ERROR);
         }
@@ -81,9 +79,7 @@ public class UserServiceImpl implements UserService {
         }
 
         String dbPass = user.getPassword();
-        String saltDb = user.getSalt();
-        String calcPass = MD5Util.formPassToDBPass(password, saltDb);
-        if (!calcPass.equals(dbPass)) {
+        if (!password.equals(dbPass)) {
             throw new GlobalException(PASSWORD_ERROR);
         }
         //生成cookie 将session返回游览器 分布式session

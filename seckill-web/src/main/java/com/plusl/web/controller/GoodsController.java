@@ -30,10 +30,6 @@ public class GoodsController extends BaseController {
     @Autowired
     private GoodsService goodsService;
 
-    @Autowired
-    private RedisService redisService;
-
-
     @RequestMapping(value = "/to_list", produces = "text/html")
     public String getGoodsList(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
         model.addAttribute("user", user);
@@ -72,7 +68,7 @@ public class GoodsController extends BaseController {
         vo.setGoods(goodsVo);
         vo.setUser(user);
         vo.setRemainSeconds(remainSeconds);
-        vo.setMiaoshaStatus(seckillStatus);
+        vo.setSeckillStatus(seckillStatus);
         result.setData(vo);
         return result;
     }

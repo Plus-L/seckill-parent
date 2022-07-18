@@ -1,5 +1,6 @@
 package com.plusl.service.rocketmq;
 
+import com.plusl.common.entity.SeckillOrder;
 import com.plusl.common.entity.User;
 import com.plusl.common.vo.GoodsVo;
 import com.plusl.common.vo.SeckillMessageVo;
@@ -36,7 +37,7 @@ public class MqConsumer implements RocketMQListener<String> {
     OrderServiceImpl orderService;
 
     @Autowired
-    SeckillServiceImpl miaoShaService;
+    SeckillServiceImpl seckillService;
 
     @Override
     public void onMessage(String s) {
@@ -50,13 +51,13 @@ public class MqConsumer implements RocketMQListener<String> {
         if (stock <= 0) {
             return;
         }
-/*        //判断是否已经秒杀到了
-        MiaoshaOrder order = orderService.getMiaoshaOrderByUserIdGoodsId(userId, goodsId);
+        //判断是否已经秒杀到了
+        SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(userId, goodsId);
         if (order != null) {
             return;
-        }*/
+        }
         //减库存 下订单 写入秒杀订单
-        miaoShaService.doSeckill(user, goods);
+        seckillService.doSeckill(user, goods);
     }
 
 }
