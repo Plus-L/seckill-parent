@@ -1,20 +1,15 @@
 package com.plusl.web;
 
 import com.alibaba.fastjson.JSONObject;
-import com.plusl.common.entity.User;
-import com.plusl.common.vo.GoodsVo;
-import com.plusl.service.impl.GoodsServiceImpl;
-import com.plusl.service.impl.UserServiceImpl;
-import com.plusl.service.mapper.GoodsMapper;
-import com.plusl.service.mapper.UserMapper;
-import org.apache.dubbo.config.annotation.DubboReference;
+import com.plusl.framework.common.entity.User;
+import com.plusl.core.service.mapper.GoodsMapper;
+import com.plusl.core.service.mapper.UserMapper;
+import com.plusl.framework.common.dataobject.GoodsDO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
-
-import java.util.List;
 
 /**
  * @program: seckill-parent
@@ -40,8 +35,8 @@ public class DBTest {
         User user0 = userMapper.getByNickname("user0");
         System.out.println(JSONObject.toJSONString(user0));
 
-        GoodsVo goodsVoByGoodsId = goodsMapper.getGoodsVoByGoodsId(1);
-        System.out.println(JSONObject.toJSONString(goodsVoByGoodsId));
+        GoodsDO goodsDoByGoodsId = goodsMapper.getGoodsDoByGoodsId(1);
+        System.out.println(JSONObject.toJSONString(goodsDoByGoodsId));
 
 //        List<GoodsVo> list = goodsService.listGoodsVo();
 //        System.out.println(list);

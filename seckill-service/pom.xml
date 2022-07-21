@@ -4,20 +4,21 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.plusl</groupId>
     <artifactId>seckill-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>seckill-service</name>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>com.seckill</groupId>
         <artifactId>skparent</artifactId>
-        <version>${revision}</version>
+        <version>1.0.0</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>com.plusl</groupId>
             <artifactId>seckill-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

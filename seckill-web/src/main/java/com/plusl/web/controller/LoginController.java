@@ -1,13 +1,15 @@
 package com.plusl.web.controller;
 
-import com.plusl.common.enums.result.Result;
-import com.plusl.common.vo.LoginVo;
-import com.plusl.service.UserService;
+import com.plusl.framework.common.enums.result.Result;
+import com.plusl.framework.common.vo.LoginVo;
+import com.plusl.core.service.Interface.UserService;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -27,7 +29,7 @@ public class LoginController {
 
     public static final Logger LOGGER = LogManager.getLogger(LoginController.class);
 
-    @Autowired
+    @DubboReference
     private UserService userService;
 
 
@@ -37,7 +39,7 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping("/do_login")
+    @PostMapping("/do_login")
     @ResponseBody
     public Result<String> dologin(HttpServletResponse response, @Valid LoginVo loginVo) {
         Result<String> result = Result.build();
@@ -47,7 +49,7 @@ public class LoginController {
     }
 
 
-    @RequestMapping("/create_token")
+    @GetMapping("/create_token")
     @ResponseBody
     public String createToken(HttpServletResponse response, @Valid LoginVo loginVo) {
         LOGGER.info(loginVo.toString());

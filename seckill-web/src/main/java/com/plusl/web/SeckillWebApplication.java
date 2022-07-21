@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author LJH
  */
 @EnableDubbo
-@MapperScan("com.plusl.service.mapper")
+@MapperScan("com.plusl.core.service.mapper")
 @SpringBootApplication(scanBasePackages = "com.plusl")
 public class SeckillWebApplication {
 

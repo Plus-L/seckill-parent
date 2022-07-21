@@ -1,14 +1,15 @@
 package com.plusl.web.controller;
 
-import com.plusl.common.entity.User;
-import com.plusl.common.enums.result.Result;
-import com.plusl.common.vo.GoodsDetailVo;
-import com.plusl.common.vo.GoodsVo;
-import com.plusl.service.GoodsService;
-import com.plusl.service.redis.GoodsKey;
-import com.plusl.service.redis.RedisService;
+import com.plusl.framework.common.convert.goods.GoodsMapStruct;
+import com.plusl.framework.common.entity.User;
+import com.plusl.framework.common.enums.result.Result;
+import com.plusl.framework.common.redis.GoodsKey;
+import com.plusl.framework.common.vo.GoodsDetailVo;
+import com.plusl.framework.common.vo.GoodsVo;
+import com.plusl.core.service.Interface.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,17 +34,17 @@ public class GoodsController extends BaseController {
     @RequestMapping(value = "/to_list", produces = "text/html")
     public String getGoodsList(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
         model.addAttribute("user", user);
-        List<GoodsVo> goodsList = goodsService.listGoodsVo();
+        List<GoodsVo> goodsList = GoodsMapStruct.INSTANCE.convertListDTOtoVO(goodsService.listGoodsDTO());
         model.addAttribute("goodsList", goodsList);
         return render(request, response, model, "goods_list", GoodsKey.getGoodsList, "");
     }
 
-    @RequestMapping("/detail/{goodsId}")
+    @GetMapping("/detail/{goodsId}")
     public Result<GoodsDetailVo> getGoodsDetail(User user, @PathVariable("goodsId") Long goodsId) {
 
         Result<GoodsDetailVo> result = Result.build();
 
-        GoodsVo goodsVo = goodsService.getGoodsVoByGoodsId(goodsId);
+        GoodsVo goodsVo = GoodsMapStruct.INSTANCE.convert(goodsService.getGoodsDoByGoodsId(goodsId));
 
         //判断距离秒杀开始还有多少时间
         long startTime = goodsVo.getStartDate().getTime();

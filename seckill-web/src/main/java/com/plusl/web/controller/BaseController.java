@@ -1,7 +1,7 @@
 package com.plusl.web.controller;
 
-import com.plusl.service.redis.KeyPrefix;
-import com.plusl.service.redis.RedisService;
+import com.plusl.framework.common.redis.KeyPrefix;
+import com.plusl.framework.common.redis.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ public class BaseController {
     ThymeleafViewResolver thymeleafViewResolver;
 
     @Autowired
-    RedisService redisService;
+    RedisUtil redisUtil;
 
     /**
      * 是否开启页面缓存
@@ -54,7 +54,7 @@ public class BaseController {
             return tplName;
         }
         //取缓存
-        String html = redisService.get(prefix, key, String.class);
+        String html = redisUtil.get(prefix, key, String.class);
         if (!StringUtils.isEmpty(html)) {
             out(response, html);
             return null;
@@ -64,7 +64,7 @@ public class BaseController {
                 request.getServletContext(), request.getLocale(), model.asMap());
         html = thymeleafViewResolver.getTemplateEngine().process(tplName, ctx);
         if (!StringUtils.isEmpty(html)) {
-            redisService.set(prefix, key, html);
+            redisUtil.set(prefix, key, html);
         }
         out(response, html);
         return null;

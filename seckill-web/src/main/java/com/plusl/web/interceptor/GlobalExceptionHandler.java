@@ -1,7 +1,7 @@
 package com.plusl.web.interceptor;
 
-import com.plusl.common.enums.result.Result;
-import com.plusl.common.exception.GlobalException;
+import com.plusl.framework.common.enums.result.Result;
+import com.plusl.framework.common.exception.GlobalException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.validation.BindException;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
-import static com.plusl.common.enums.status.ResultStatus.SESSION_ERROR;
-import static com.plusl.common.enums.status.ResultStatus.SYSTEM_ERROR;
+import static com.plusl.framework.common.enums.status.ResultStatus.SESSION_ERROR;
+import static com.plusl.framework.common.enums.status.ResultStatus.SYSTEM_ERROR;
 
 /**
  * @program: seckill-parent
@@ -22,7 +22,8 @@ import static com.plusl.common.enums.status.ResultStatus.SYSTEM_ERROR;
  * @create: 2022-07-06 18:05
  **/
 
-@ControllerAdvice
+@Deprecated
+//@ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
@@ -33,7 +34,8 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         if (e instanceof GlobalException) {
             GlobalException ex = (GlobalException) e;
-            return Result.error(ex.getStatus());
+            //TODO: 统一返回类待处理
+            return Result.error(SYSTEM_ERROR);
         } else if (e instanceof org.springframework.validation.BindException) {
             org.springframework.validation.BindException ex = (BindException) e;
             List<ObjectError> errors = ex.getAllErrors();

@@ -15,17 +15,17 @@
     <dubbo:protocol name="dubbo" port="20880"/>
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.plusl.service.GoodsService" ref="goodsServiceImpl"/>
-    <dubbo:service interface="com.plusl.service.UserService" ref="userServiceImpl"/>
-    <dubbo:service interface="com.plusl.service.SeckillService" ref="seckillServiceImpl"/>
-    <dubbo:service interface="com.plusl.service.OrderService" ref="orderServiceImpl"/>
-    <dubbo:service interface="com.plusl.service.redis.RedisService" ref="redisServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.Interface.GoodsService" ref="goodsServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.Interface.UserService" ref="userServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.Interface.SeckillService" ref="seckillServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.Interface.OrderService" ref="orderServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.redis.RedisService" ref="redisServiceImpl"/>
 
     <!-- 和本地bean一样实现服务 -->
-    <bean id="goodsService" class="com.plusl.service.impl.GoodsServiceImpl"/>
-    <bean id="userServiceImpl" class="com.plusl.service.impl.UserServiceImpl"/>
-    <bean id="seckillServiceImpl" class="com.plusl.service.impl.SeckillServiceImpl"/>
-    <bean id="orderServiceImpl" class="com.plusl.service.impl.OrderServiceImpl"/>
-    <bean id="redisServiceImpl" class="com.plusl.service.redis.RedisService"/>
+    <bean id="goodsService" class="com.plusl.core.service.impl.GoodsServiceImpl"/>
+    <bean id="userServiceImpl" class="com.plusl.core.service.impl.UserServiceImpl"/>
+    <bean id="seckillServiceImpl" class="com.plusl.core.service.impl.SeckillServiceImpl"/>
+    <bean id="orderServiceImpl" class="com.plusl.core.service.impl.OrderServiceImpl"/>
+    <bean id="redisServiceImpl" class="com.plusl.core.service.redis.RedisService"/>
 
 </beans>

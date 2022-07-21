@@ -1,33 +1,28 @@
 package com.plusl.web.controller;
 
-import com.plusl.common.entity.OrderInfo;
-import com.plusl.common.entity.SeckillOrder;
-import com.plusl.common.entity.User;
-import com.plusl.common.enums.result.Result;
-import com.plusl.common.enums.status.ResultStatus;
-import com.plusl.common.vo.GoodsVo;
-import com.plusl.common.vo.SeckillMessageVo;
-import com.plusl.service.GoodsService;
-import com.plusl.service.OrderService;
-import com.plusl.service.SeckillService;
-import com.plusl.service.redis.GoodsKey;
-import com.plusl.service.redis.RedisService;
-import com.plusl.service.rocketmq.MqProducer;
+import com.plusl.framework.common.dto.GoodsDTO;
+import com.plusl.framework.common.entity.OrderInfo;
+import com.plusl.framework.common.entity.SeckillOrder;
+import com.plusl.framework.common.entity.User;
+import com.plusl.framework.common.enums.result.Result;
+import com.plusl.framework.common.enums.status.ResultStatus;
+import com.plusl.framework.common.redis.GoodsKey;
+import com.plusl.framework.common.dto.SeckillMessageDTO;
+import com.plusl.framework.common.redis.RedisUtil;
+import com.plusl.core.service.Interface.GoodsService;
+import com.plusl.core.service.Interface.OrderService;
+import com.plusl.core.service.Interface.SeckillService;
+import com.plusl.core.service.rocketmq.MqProducer;
 import com.plusl.web.interceptor.RequireLogin;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.plusl.common.enums.status.ResultStatus.EXCEPTION;
-import static com.plusl.common.enums.status.ResultStatus.MIAO_SHA_OVER;
+import static com.plusl.framework.common.enums.status.ResultStatus.EXCEPTION;
+import static com.plusl.framework.common.enums.status.ResultStatus.MIAO_SHA_OVER;
 
 /**
  * @program: seckill-parent
@@ -38,9 +33,6 @@ import static com.plusl.common.enums.status.ResultStatus.MIAO_SHA_OVER;
 @RestController
 @RequestMapping("/activity")
 public class SeckillController implements InitializingBean {
-
-    @Autowired
-    RedisService redisService;
 
     @Autowired
     GoodsService goodsService;
@@ -54,10 +46,8 @@ public class SeckillController implements InitializingBean {
     @Autowired
     OrderService orderService;
 
-    /**
-     * redis停止请求标识
-     */
-    private Map<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
+    @Autowired
+    RedisUtil redisUtil;
 
     /**
      * 执行秒杀，异步请求秒杀
@@ -67,11 +57,10 @@ public class SeckillController implements InitializingBean {
      * @return 规范化Json返回值
      */
     @RequireLogin(seconds = 5, maxCount = 1000, needLogin = false)
-    @RequestMapping(value = "/doseckill", method = RequestMethod.POST)
-    public Result<OrderInfo> doSeckill(User user, @RequestParam("goodsId") long goodsId) {
+    @PostMapping(value = "/doseckill")
+    public Result<OrderInfo> doSeckill(User user, @RequestParam("goodsId") Long goodsId) {
 
         Result<OrderInfo> result = Result.build();
-
         //判断是否已经秒杀到了,防止重复秒杀
         SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
         if (order != null) {
@@ -79,30 +68,22 @@ public class SeckillController implements InitializingBean {
             return result;
         }
 
-        //内存标识符，防止库存结束后仍然查询redis
-        Boolean isOver = localOverMap.get(goodsId);
-        if (isOver) {
-            result.withError(MIAO_SHA_OVER);
-            return result;
-        }
-
         //预减库存
-        Long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + goodsId);
+        Long stock = redisUtil.decr(GoodsKey.getSeckillGoodsStock, "" + goodsId);
         if (stock < 0) {
-            localOverMap.replace(goodsId, true);
             result.withError(EXCEPTION.getCode(), MIAO_SHA_OVER.getMessage());
             return result;
         }
 
-        SeckillMessageVo seckillMessageVo = new SeckillMessageVo();
-        seckillMessageVo.setGoodsId(goodsId);
-        seckillMessageVo.setUser(user);
-        mqProducer.sendSeckillMessage(seckillMessageVo);
+        SeckillMessageDTO seckillMessageDTO = new SeckillMessageDTO();
+        seckillMessageDTO.setGoodsId(goodsId);
+        seckillMessageDTO.setUser(user);
+        mqProducer.sendSeckillMessage(seckillMessageDTO);
         return result;
     }
 
     @RequireLogin(seconds = 5, maxCount = 5, needLogin = false)
-    @RequestMapping(value = "/result", method = RequestMethod.GET)
+    @GetMapping(value = "/result")
     public Result<Long> getSeckillResult(Model model, User user,
                                          @RequestParam("goodsId") long goodsId) {
         Result<Long> result = Result.build();
@@ -119,13 +100,12 @@ public class SeckillController implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        List<GoodsVo> goodsList = goodsService.listGoodsVo();
+        List<GoodsDTO> goodsList = goodsService.listGoodsDTO();
         if (goodsList == null) {
             return;
         }
-        for (GoodsVo goodsVo : goodsList) {
-            goodsService.initSetGoodsMock(goodsVo);
-            localOverMap.put(goodsVo.getId(), false);
+        for (GoodsDTO goodsDTO : goodsList) {
+            goodsService.initSetGoodsMock(goodsDTO);
         }
     }
 }

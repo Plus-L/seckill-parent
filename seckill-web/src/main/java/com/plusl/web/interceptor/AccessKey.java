@@ -1,6 +1,6 @@
 package com.plusl.web.interceptor;
 
-import com.plusl.service.redis.BasePrefix;
+import com.plusl.framework.common.redis.BasePrefix;
 
 public class AccessKey extends BasePrefix {
 

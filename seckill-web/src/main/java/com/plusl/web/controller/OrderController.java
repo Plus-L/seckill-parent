@@ -1,17 +1,17 @@
 package com.plusl.web.controller;
 
-import com.plusl.common.entity.OrderInfo;
-import com.plusl.common.entity.User;
-import com.plusl.common.enums.result.Result;
-import com.plusl.common.enums.status.ResultStatus;
-import com.plusl.common.vo.GoodsVo;
-import com.plusl.common.vo.OrderDetailVo;
-import com.plusl.service.GoodsService;
-import com.plusl.service.OrderService;
-import com.plusl.service.UserService;
-import com.plusl.service.redis.RedisService;
-import com.plusl.web.interceptor.RequireLogin;
+import com.plusl.framework.common.convert.goods.GoodsMapStruct;
+import com.plusl.framework.common.entity.OrderInfo;
+import com.plusl.framework.common.entity.User;
+import com.plusl.framework.common.enums.result.Result;
+import com.plusl.framework.common.enums.status.ResultStatus;
+import com.plusl.framework.common.vo.GoodsVo;
+import com.plusl.framework.common.vo.OrderDetailVo;
+import com.plusl.core.service.Interface.GoodsService;
+import com.plusl.core.service.Interface.OrderService;
+import com.plusl.core.service.Interface.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,15 +30,12 @@ public class OrderController {
     UserService userService;
 
     @Autowired
-    RedisService redisService;
-
-    @Autowired
     OrderService orderService;
 
     @Autowired
     GoodsService goodsService;
 
-    @RequestMapping("/detail")
+    @GetMapping("/detail")
     public Result<OrderDetailVo> orderDetailInfo(User user, @RequestParam("orderId") long orderId) {
 
         Result<OrderDetailVo> result = Result.build();
@@ -53,7 +50,7 @@ public class OrderController {
         }
 
         long goodsId = order.getGoodsId();
-        GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
+        GoodsVo goods = GoodsMapStruct.INSTANCE.convert(goodsService.getGoodsDoByGoodsId(goodsId));
 
         OrderDetailVo orderDetailVo = new OrderDetailVo();
         orderDetailVo.setOrder(order);
