@@ -58,7 +58,7 @@ public class SeckillController implements InitializingBean {
      */
     @RequireLogin(seconds = 5, maxCount = 1000, needLogin = false)
     @PostMapping(value = "/doseckill")
-    public Result<OrderInfo> doSeckill(User user, @RequestParam("goodsId") Long goodsId) {
+    public Result<OrderInfo> doSeckill(@RequestBody User user, @RequestParam("goodsId") Long goodsId) {
 
         Result<OrderInfo> result = Result.build();
         //判断是否已经秒杀到了,防止重复秒杀

@@ -32,8 +32,8 @@ public class BaseController {
     /**
      * 是否开启页面缓存
      */
-    @Value("#{'${pageCache.enbale}'}")
-    private boolean pageCacheEnable;
+//    @Value(value = "${pageCache.enbale}")
+    private boolean pageCacheEnable = true;
 
     public static void out(HttpServletResponse res, String html) {
         res.setContentType("text/html");

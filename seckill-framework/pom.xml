@@ -7,7 +7,7 @@
     <version>1.0.0</version>
     <name>seckill-framework</name>
     <description>Demo project for Spring Boot</description>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.seckill</groupId>

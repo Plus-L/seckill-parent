@@ -6,7 +6,7 @@
     <artifactId>seckill-web</artifactId>
     <version>1.0.0</version>
     <name>seckill-web</name>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.seckill</groupId>

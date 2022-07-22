@@ -16,6 +16,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Service
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
+    /**
+     * 条件判断，当supportParameter返回值为true时，调用resolveArgument方法
+     * @param methodParameter 方法体
+     * @return true/false
+     */
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         Class<?> clazz = methodParameter.getParameterType();
@@ -23,7 +28,11 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest webRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter methodParameter,
+                                  ModelAndViewContainer modelAndViewContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory webDataBinderFactory)
+            throws Exception {
         /**
          *  threadlocal 存储线程副本 保证线程不冲突
          */

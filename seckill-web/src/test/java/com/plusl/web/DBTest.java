@@ -7,6 +7,7 @@ import com.plusl.core.service.mapper.UserMapper;
 import com.plusl.framework.common.dataobject.GoodsDO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +31,9 @@ public class DBTest {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Value(value = "${spring.datasource.driver-class-name}")
+    private String cache;
+
     @Test
     public void testMySQLDB() {
         User user0 = userMapper.getByNickname("user0");
@@ -46,5 +50,10 @@ public class DBTest {
     public void testUserService() {
         redisTemplate.opsForValue().set(1, 100);
         System.out.println(redisTemplate.opsForValue().get(1));
+    }
+
+    @Test
+    public void testApollo() {
+        System.out.println(cache);
     }
 }
