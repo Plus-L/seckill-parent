@@ -3,6 +3,7 @@ package com.plusl.framework.common.dto;
 import com.plusl.framework.common.entity.Goods;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class GoodsDTO extends Goods {
+public class GoodsDTO extends Goods implements Serializable {
     private Double seckillPrice;
     private Integer stockCount;
     private Date startDate;

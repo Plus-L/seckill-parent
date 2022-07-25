@@ -1,7 +1,7 @@
 package com.plusl.framework.common.convert.user;
 
-import com.plusl.framework.common.dataobject.GoodsDO;
-import com.plusl.framework.common.dto.GoodsDTO;
+import com.plusl.framework.common.dto.UserLoginDTO;
+import com.plusl.framework.common.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,11 +16,18 @@ public interface UserConvert {
     UserConvert INSTANCE = Mappers.getMapper(UserConvert.class);
 
     /**
-     * DO -> DTO
-     * @param goodsDO 商品数据对象
-     * @return 商品数据传输对象
+     * dto -> do
+     * @param userLoginDTO dto
+     * @return do
      */
-    GoodsDTO convert(GoodsDO goodsDO);
+    User convert(UserLoginDTO userLoginDTO);
+
+    /**
+     * entity -> dto
+     * @param user entity
+     * @return dto
+     */
+    UserLoginDTO toDTO(User user);
 
 
 

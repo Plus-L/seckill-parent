@@ -4,6 +4,8 @@ import com.plusl.framework.common.entity.OrderInfo;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @program: seckill-parent
  * @description: 订单详情VO
@@ -12,7 +14,7 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-public class OrderDetailVo {
+public class OrderDetailVo implements Serializable {
     public GoodsVo goods;
     public OrderInfo order;
 

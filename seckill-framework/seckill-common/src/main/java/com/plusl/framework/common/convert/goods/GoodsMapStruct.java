@@ -16,7 +16,7 @@ import java.util.List;
  * @author: PlusL
  * @create: 2022-07-18 17:13
  **/
-@Mapper()
+@Mapper
 public interface GoodsMapStruct {
 
     GoodsMapStruct INSTANCE = Mappers.getMapper(GoodsMapStruct.class);
@@ -42,6 +42,11 @@ public interface GoodsMapStruct {
      */
     List<GoodsDTO> convertListDOtoDTO(List<GoodsDO> goodsDOList);
 
+    /**
+     * 商品DTO列表->商品VO列表
+     * @param goodsDTOList DTO列表
+     * @return VO列表
+     */
     List<GoodsVo> convertListDTOtoVO(List<GoodsDTO> goodsDTOList);
 
 

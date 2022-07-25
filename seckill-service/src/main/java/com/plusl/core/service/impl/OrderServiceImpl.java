@@ -6,7 +6,7 @@ import com.plusl.framework.common.entity.SeckillOrder;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.redis.OrderKey;
 import com.plusl.framework.common.redis.RedisUtil;
-import com.plusl.core.service.Interface.OrderService;
+import com.plusl.core.service.OrderService;
 import com.plusl.core.service.mapper.OrderMapper;
 import com.plusl.core.service.util.SnowflakeIdWorker;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -33,12 +33,12 @@ public class OrderServiceImpl implements OrderService {
     RedisUtil redisUtil;
 
     @Override
-    public OrderInfo getOrderById(long id) {
-        return orderMapper.getOrderById(id);
+    public OrderInfo getOrderById(Long orderId) {
+        return orderMapper.getOrderById(orderId);
     }
 
     @Override
-    public SeckillOrder  getSeckillOrderByUserIdGoodsId(long userId, long goodsId) {
+    public SeckillOrder  getSeckillOrderByUserIdGoodsId(Long userId, Long goodsId) {
         //TODO：直接取数据库可能导致服务崩掉的问题，解决方法如加到缓存，加入到缓存还有缓存击穿的问题需要考虑
         return orderMapper.getSeckillOrderByUserIdGoodsId(userId, goodsId);
     }

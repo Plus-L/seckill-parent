@@ -15,10 +15,10 @@
     <dubbo:protocol name="dubbo" port="20880"/>
 
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.plusl.core.service.Interface.GoodsService" ref="goodsServiceImpl"/>
-    <dubbo:service interface="com.plusl.core.service.Interface.UserService" ref="userServiceImpl"/>
-    <dubbo:service interface="com.plusl.core.service.Interface.SeckillService" ref="seckillServiceImpl"/>
-    <dubbo:service interface="com.plusl.core.service.Interface.OrderService" ref="orderServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.GoodsService" ref="goodsServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.UserService" ref="userServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.SeckillService" ref="seckillServiceImpl"/>
+    <dubbo:service interface="com.plusl.core.service.OrderService" ref="orderServiceImpl"/>
     <dubbo:service interface="com.plusl.core.service.redis.RedisService" ref="redisServiceImpl"/>
 
     <!-- 和本地bean一样实现服务 -->

@@ -21,7 +21,7 @@ public class CommonResult<T> implements Serializable {
     /**
      * 错误码
      */
-    private Integer code;
+    private String code;
     /**
      * 返回数据
      */
@@ -44,7 +44,7 @@ public class CommonResult<T> implements Serializable {
         return error(result.getCode(), result.getMsg());
     }
 
-    public static <T> CommonResult<T> error(Integer code, String message) {
+    public static <T> CommonResult<T> error(String code, String message) {
         Assert.isTrue(!ResultStatus.SUCCESS.getCode().equals(code), "调用error方法时传入code不能为success的code");
         CommonResult<T> result = new CommonResult<>();
         result.code = code;
@@ -64,7 +64,7 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
-    public static boolean isSuccess(Integer code) {
+    public static boolean isSuccess(String code) {
         return Objects.equals(code, ResultStatus.SUCCESS.getCode());
     }
 

@@ -26,8 +26,8 @@ public class BaseController {
     @Autowired
     ThymeleafViewResolver thymeleafViewResolver;
 
-    @Autowired
-    RedisUtil redisUtil;
+//    @Autowired
+//    RedisUtil redisUtil;
 
     /**
      * 是否开启页面缓存
@@ -50,23 +50,23 @@ public class BaseController {
 
     public String render(HttpServletRequest request, HttpServletResponse response,
                          Model model, String tplName, KeyPrefix prefix, String key) {
-        if (!pageCacheEnable) {
-            return tplName;
-        }
-        //取缓存
-        String html = redisUtil.get(prefix, key, String.class);
-        if (!StringUtils.isEmpty(html)) {
-            out(response, html);
-            return null;
-        }
-        //手动渲染
-        WebContext ctx = new WebContext(request, response,
-                request.getServletContext(), request.getLocale(), model.asMap());
-        html = thymeleafViewResolver.getTemplateEngine().process(tplName, ctx);
-        if (!StringUtils.isEmpty(html)) {
-            redisUtil.set(prefix, key, html);
-        }
-        out(response, html);
+//        if (!pageCacheEnable) {
+//            return tplName;
+//        }
+//        //取缓存
+//        String html = redisUtil.get(prefix, key, String.class);
+//        if (!StringUtils.isEmpty(html)) {
+//            out(response, html);
+//            return null;
+//        }
+//        //手动渲染
+//        WebContext ctx = new WebContext(request, response,
+//                request.getServletContext(), request.getLocale(), model.asMap());
+//        html = thymeleafViewResolver.getTemplateEngine().process(tplName, ctx);
+//        if (!StringUtils.isEmpty(html)) {
+//            redisUtil.set(prefix, key, html);
+//        }
+//        out(response, html);
         return null;
     }
 }

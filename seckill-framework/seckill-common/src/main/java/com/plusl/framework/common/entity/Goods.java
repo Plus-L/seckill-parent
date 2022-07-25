@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @program: seckill-parent
  * @description: GoodsEntity
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Goods {
+public class Goods implements Serializable {
 
     private Long id;
     private String goodsName;

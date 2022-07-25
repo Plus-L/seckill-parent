@@ -18,10 +18,10 @@ import lombok.Getter;
  **/
 public class GlobalException extends RuntimeException {
 
-    private static final Integer FAIL_CODE = 400;
+    private static final String FAIL_CODE = "400";
 
     @Getter
-    private final Integer code;
+    private final String code;
 
     @Getter
     private final String errorMessage;
@@ -30,7 +30,7 @@ public class GlobalException extends RuntimeException {
         this(FAIL_CODE, null);
     }
 
-    public GlobalException(Integer code, String errorMessage) {
+    public GlobalException(String code, String errorMessage) {
         this.code = code;
         this.errorMessage = errorMessage;
     }
@@ -47,7 +47,7 @@ public class GlobalException extends RuntimeException {
         this(FAIL_CODE, errorMessage, cause);
     }
 
-    public GlobalException(Integer code, String errorMessage, Throwable cause) {
+    public GlobalException(String code, String errorMessage, Throwable cause) {
         super(errorMessage, cause);
         this.code = code;
         this.errorMessage = errorMessage;

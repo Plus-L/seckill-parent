@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * @program: seckill-parent
@@ -19,14 +20,14 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @ToString
-public class UserLoginDTO {
+public class UserLoginDTO implements Serializable {
     /**
      * 账号
      */
     @NotBlank(message = "登陆账号不能为空")
     @Length(min = 5, max = 16, message = "账号长度为 5-16 位")
     @Pattern(regexp = "^[A-Za-z0-9]+$", message = "账号格式为数字以及字母")
-    private String username;
+    private String nickname;
     /**
      * 密码
      */
@@ -34,12 +35,12 @@ public class UserLoginDTO {
     @Length(min = 4, max = 16, message = "密码长度为 4-16 位")
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getNickname() {
+        return nickname;
     }
 
-    public UserLoginDTO setUsername(String username) {
-        this.username = username;
+    public UserLoginDTO setNickname(String nickname) {
+        this.nickname = nickname;
         return this;
     }
 
@@ -55,7 +56,7 @@ public class UserLoginDTO {
     @Override
     public String toString() {
         return "UserLoginDto{" +
-                "username='" + username + '\'' +
+                "nickname='" + nickname + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

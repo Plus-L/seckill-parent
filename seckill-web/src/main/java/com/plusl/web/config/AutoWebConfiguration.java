@@ -18,7 +18,7 @@ import java.util.List;
 @Configuration
 public class AutoWebConfiguration implements WebMvcConfigurer {
 
-    final String[] notLoginInterceptPaths = {"/login/**"};
+    final String[] notLoginInterceptPaths = {"/checkPasswordAndLogin/**"};
 
     @Autowired
     UserArgumentResolver resolver;

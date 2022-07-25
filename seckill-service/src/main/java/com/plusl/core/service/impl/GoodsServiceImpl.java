@@ -1,17 +1,14 @@
 package com.plusl.core.service.impl;
 
 
-import com.plusl.core.service.Interface.GoodsService;
+import com.plusl.core.service.GoodsService;
 import com.plusl.core.service.mapper.GoodsMapper;
 import com.plusl.framework.common.convert.goods.GoodsMapStruct;
 import com.plusl.framework.common.dataobject.GoodsDO;
 import com.plusl.framework.common.dto.GoodsDTO;
 import com.plusl.framework.common.entity.SeckillGoods;
-import com.plusl.framework.common.enums.result.Result;
-import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.framework.common.redis.GoodsKey;
 import com.plusl.framework.common.redis.RedisUtil;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +21,6 @@ import java.util.List;
  * @create: 2022-07-07 11:40
  **/
 @Service
-@DubboService(interfaceClass = GoodsService.class)
 public class GoodsServiceImpl implements GoodsService {
 
     @Autowired
@@ -40,28 +36,22 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsDTO getGoodsDoByGoodsId(long goodsId) {
+    public GoodsDTO getGoodsDoByGoodsId(Long goodsId) {
         return GoodsMapStruct.INSTANCE.convert(goodsMapper.getGoodsDoByGoodsId(goodsId));
     }
 
     @Override
-    public boolean reduceStock(GoodsDTO goodsDTO) {
+    public Boolean reduceStock(Long goodsId) {
         SeckillGoods g = new SeckillGoods();
-        g.setGoodsId(goodsDTO.getId());
+        g.setGoodsId(goodsId);
         int ret = goodsMapper.reduceStock(g);
+        //TODO: 此处返回类型可能与包装类冲突
         return ret > 0;
     }
 
     @Override
-    public Result<GoodsDTO> initSetGoodsMock(GoodsDTO goodsDTO) {
-        Result<GoodsDTO> result = Result.build();
-        boolean ok = redisUtil.set(GoodsKey.getSeckillGoodsStock, "" + goodsDTO.getId(), goodsDTO.getStockCount());
-        if (!ok) {
-            result.withError(ResultStatus.REDIS_ERROR);
-        } else {
-            result.setData(goodsDTO);
-        }
-        return result;
+    public Boolean initSetGoodsMock(GoodsDTO goodsDTO) {
+        return redisUtil.set(GoodsKey.getSeckillGoodsStock, "" + goodsDTO.getId(), goodsDTO.getStockCount());
     }
 
 }

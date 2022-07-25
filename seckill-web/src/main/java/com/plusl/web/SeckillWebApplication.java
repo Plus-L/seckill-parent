@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableDubbo
 @EnableApolloConfig
 @MapperScan("com.plusl.core.service.mapper")
-@SpringBootApplication(scanBasePackages = "com.plusl")
+@SpringBootApplication(scanBasePackages = {"com.plusl.web"})
 public class SeckillWebApplication {
 
     public static void main(String[] args) {

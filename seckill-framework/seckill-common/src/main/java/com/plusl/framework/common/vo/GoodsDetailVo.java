@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @program: seckill-parent
  * @description: 商品详情Vo
@@ -16,7 +18,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoodsDetailVo {
+public class GoodsDetailVo implements Serializable {
 
     private int seckillStatus = 0;
     private int remainSeconds = 0;

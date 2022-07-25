@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
+
 /**
  * @program: seckill-parent
  * @description: 秒杀订单实体类
@@ -18,7 +20,7 @@ import org.apache.ibatis.type.Alias;
 @AllArgsConstructor
 @NoArgsConstructor
 @Alias("seckillorder")
-public class SeckillOrder {
+public class SeckillOrder implements Serializable {
     private Long id;
     private Long userId;
     private Long orderId;

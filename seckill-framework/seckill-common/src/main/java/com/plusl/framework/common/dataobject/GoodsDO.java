@@ -4,6 +4,7 @@ import com.plusl.framework.common.entity.Goods;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Alias("goodsDo")
-public class GoodsDO extends Goods {
+public class GoodsDO extends Goods implements Serializable {
 
     private Double seckillPrice;
     private Integer stockCount;

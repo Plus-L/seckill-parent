@@ -1,13 +1,15 @@
 package com.plusl.core.service.impl;
 
 
+import cn.hutool.core.util.ObjectUtil;
+import com.plusl.framework.common.dto.UserLoginDTO;
+import com.plusl.framework.common.dto.UserWithTokenDTO;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.exception.GlobalException;
 import com.plusl.framework.common.redis.RedisUtil;
 import com.plusl.framework.common.redis.UserKey;
 import com.plusl.framework.common.utils.UUIDUtil;
-import com.plusl.framework.common.vo.LoginVo;
-import com.plusl.core.service.Interface.UserService;
+import com.plusl.core.service.UserService;
 import com.plusl.core.service.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -15,9 +17,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 
 import static com.plusl.framework.common.enums.status.ResultStatus.*;
 
@@ -31,7 +30,6 @@ import static com.plusl.framework.common.enums.status.ResultStatus.*;
 @DubboService(interfaceClass = UserService.class)
 public class UserServiceImpl implements UserService {
 
-    public static final String COOKIE_NAME_TOKEN = "token";
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
     @Autowired
@@ -41,15 +39,16 @@ public class UserServiceImpl implements UserService {
     private RedisUtil redisUtil;
 
     @Override
-    public boolean login(HttpServletResponse response, LoginVo loginVo) {
-        if (loginVo == null) {
+    public UserWithTokenDTO checkPasswordAndLogin(UserLoginDTO userLoginDTO) {
+
+        if (ObjectUtil.isEmpty(userLoginDTO)) {
             throw new GlobalException(SYSTEM_ERROR.getCode(), SYSTEM_ERROR.getMessage());
         }
 
-        String mobile = loginVo.getNickname();
-        String password = loginVo.getPassword();
-        User user = getByNickName(mobile);
-        if (user == null) {
+        String mobile = userLoginDTO.getNickname();
+        String password = userLoginDTO.getPassword();
+        User user = getUserByNickName(mobile);
+        if (ObjectUtil.isEmpty(user)) {
             throw new GlobalException(MOBILE_NOT_EXIST.getCode(), MOBILE_NOT_EXIST.getMessage());
         }
 
@@ -59,20 +58,24 @@ public class UserServiceImpl implements UserService {
         }
         //生成cookie 将session返回游览器 分布式session
         String token = UUIDUtil.uuid();
-        addCookie(response, token, user);
-        return true;
+
+        redisUtil.set(UserKey.token, token, user);
+        UserWithTokenDTO userWithTokenDTO = new UserWithTokenDTO();
+        userWithTokenDTO.setUser(user);
+        userWithTokenDTO.setToken(token);
+        return userWithTokenDTO;
     }
 
 
     @Override
-    public String createToken(HttpServletResponse response, LoginVo loginVo) {
-        if (loginVo == null) {
+    public String createToken(UserLoginDTO userLoginDTO) {
+        if (userLoginDTO == null) {
             throw new GlobalException(SYSTEM_ERROR.getCode(),SYSTEM_ERROR.getMessage());
         }
 
-        String mobile = loginVo.getNickname();
-        String password = loginVo.getPassword();
-        User user = getByNickName(mobile);
+        String mobile = userLoginDTO.getNickname();
+        String password = userLoginDTO.getPassword();
+        User user = getUserByNickName(mobile);
         if (user == null) {
             throw new GlobalException(MOBILE_NOT_EXIST.getCode(), MOBILE_NOT_EXIST.getMessage());
         }
@@ -83,36 +86,27 @@ public class UserServiceImpl implements UserService {
         }
         //生成cookie 将session返回游览器 分布式session
         String token = UUIDUtil.uuid();
-        addCookie(response, token, user);
-        return token;
-    }
-
-    private void addCookie(HttpServletResponse response, String token, User user) {
         redisUtil.set(UserKey.token, token, user);
-        Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
-        //设置有效期
-        cookie.setMaxAge(UserKey.token.expireSeconds());
-        cookie.setPath("/");
-        response.addCookie(cookie);
+        return token;
     }
 
 
     @Override
-    public User getByToken(HttpServletResponse response, String token) {
+    public User getUserByToken(String token) {
 
         if (StringUtils.isEmpty(token)) {
             return null;
         }
         User user = redisUtil.get(UserKey.token, token, User.class);
         if (user != null) {
-            addCookie(response, token, user);
+            redisUtil.set(UserKey.token, token, user);
         }
         return user;
 
     }
 
     @Override
-    public User getByNickName(String nickName) {
+    public User getUserByNickName(String nickName) {
         //取缓存
         User user = redisUtil.get(UserKey.getByNickName, "" + nickName, User.class);
         if (user != null) {

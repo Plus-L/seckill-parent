@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.dubbo.rpc.RpcException;
 import org.springframework.util.Assert;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
@@ -97,6 +98,12 @@ public class GlobalExceptionHandler {
     public CommonResult<?> missingServletRequestParameterExceptionHandler(MissingServletRequestParameterException ex) {
         log.warn("[missingServletRequestParameterExceptionHandler]", ex);
         return CommonResult.error(FAILD.getCode(), String.format("请求参数缺失:%s", ex.getParameterName()));
+    }
+
+    @ExceptionHandler(value = RpcException.class)
+    public CommonResult<?> RPCExceptionHandler(RpcException ex) {
+        log.warn("[RPCExceptionHandler]", ex);
+        return CommonResult.error(FAILD.getCode(), String.format("RPC远程调用异常:%s", ex.getMessage()));
     }
 
     /**

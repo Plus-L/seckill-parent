@@ -18,7 +18,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoodsVo extends Goods {
+public class GoodsVo extends Goods{
 
     private Double seckillPrice;
     private Integer stockCount;

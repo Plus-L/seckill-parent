@@ -8,11 +8,11 @@ import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.redis.GoodsKey;
 import com.plusl.framework.common.redis.RedisUtil;
 import com.plusl.framework.common.redis.SeckillKey;
-import com.plusl.core.service.Interface.GoodsService;
-import com.plusl.core.service.Interface.OrderService;
-import com.plusl.core.service.Interface.SeckillService;
+import com.plusl.core.service.GoodsService;
+import com.plusl.core.service.OrderService;
+import com.plusl.core.service.SeckillService;
 import com.plusl.core.service.rocketmq.MqProducer;
-import org.apache.dubbo.config.annotation.DubboService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author: PlusL
  * @create: 2022-07-07 15:23
  **/
+@Slf4j
 @Service
-@DubboService(interfaceClass = SeckillService.class)
 public class SeckillServiceImpl implements SeckillService {
 
     @Autowired
@@ -43,18 +43,19 @@ public class SeckillServiceImpl implements SeckillService {
     @Transactional
     public OrderInfo createOrderAndReduceStock(User user, GoodsDTO goodsDTO) {
         //减库存 下订单 写入秒杀订单
-        boolean success = goodsService.reduceStock(goodsDTO);
+        Long goodsId = goodsDTO.getId();
+        boolean success = goodsService.reduceStock(goodsId);
         if (success) {
             return orderService.createOrder(user, goodsDTO);
         } else {
             //如果库存不存在则内存标记为true
-            setGoodsOver(goodsDTO.getId());
+            setGoodsOver(goodsId);
             return null;
         }
     }
 
     @Override
-    public long getSeckillResult(Long userId, long goodsId) {
+    public Long getSeckillResult(Long userId, Long goodsId) {
         SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(userId, goodsId);
         //秒杀成功
         if (order != null) {
@@ -62,9 +63,9 @@ public class SeckillServiceImpl implements SeckillService {
         } else {
             boolean isOver = getGoodsOver(goodsId);
             if (isOver) {
-                return -1;
+                return -1L;
             } else {
-                return 0;
+                return 0L;
             }
         }
     }

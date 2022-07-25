@@ -1,12 +1,14 @@
 package com.plusl.web.interceptor;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.enums.result.Result;
 import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.framework.common.redis.RedisUtil;
+import com.plusl.framework.common.redis.UserKey;
 import com.plusl.framework.common.utils.UserContext;
-import com.plusl.core.service.Interface.UserService;
+import com.plusl.web.client.UserClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
+import static com.plusl.framework.common.constant.CommonConstant.COOKIE_NAME_TOKEN;
 import static com.plusl.framework.common.enums.status.ResultStatus.ACCESS_LIMIT_REACHED;
 import static com.plusl.framework.common.enums.status.ResultStatus.SESSION_ERROR;
 
@@ -34,10 +37,10 @@ public class LoginInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
     @Autowired
-    UserService userService;
+    UserClient userClient;
 
-    @Autowired
-    RedisUtil redisUtil;
+//    @Autowired
+//    RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -63,19 +66,17 @@ public class LoginInterceptor implements HandlerInterceptor {
                         return false;
                     }
                     key += "_" + user.getNickname();
-                } else {
-                    //do nothing
                 }
-                AccessKey ak = AccessKey.withExpire(seconds);
-                Integer count = redisUtil.get(ak, key, Integer.class);
-                if (count == null) {
-                    redisUtil.set(ak, key, 1);
-                } else if (count < maxCount) {
-                    redisUtil.incr(ak, key);
-                } else {
-                    render(response, ACCESS_LIMIT_REACHED);
-                    return false;
-                }
+//                AccessKey ak = AccessKey.withExpire(seconds);
+//                Integer count = redisUtil.get(ak, key, Integer.class);
+//                if (count == null) {
+//                    redisUtil.set(ak, key, 1);
+//                } else if (count < maxCount) {
+//                    redisUtil.incr(ak, key);
+//                } else {
+//                    render(response, ACCESS_LIMIT_REACHED);
+//                    return false;
+//                }
             }
         } catch (Exception e) {
             logger.error("loginInterceptor主要方法异常", e);
@@ -104,7 +105,15 @@ public class LoginInterceptor implements HandlerInterceptor {
             return null;
         }
         String token = StringUtils.isEmpty(paramToken) ? cookieToken : paramToken;
-        return userService.getByToken(response, token);
+        User user = userClient.getUserByToken(token);
+        if (!ObjectUtil.isEmpty(user)) {
+            Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
+            //设置有效期
+            cookie.setMaxAge(UserKey.token.expireSeconds());
+            cookie.setPath("/");
+            response.addCookie(cookie);
+        }
+        return user;
     }
 
     private String getCookieValue(HttpServletRequest request, String cookiName) {

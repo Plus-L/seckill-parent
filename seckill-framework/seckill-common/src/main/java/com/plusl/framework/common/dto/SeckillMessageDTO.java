@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * @program: seckill-parent
  * @description: UserId GoodsId
@@ -15,7 +17,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SeckillMessageDTO {
+public class SeckillMessageDTO implements Serializable {
 
     private User user;
     private Long goodsId;

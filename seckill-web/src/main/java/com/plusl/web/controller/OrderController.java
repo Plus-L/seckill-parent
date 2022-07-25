@@ -1,20 +1,21 @@
 package com.plusl.web.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.plusl.framework.common.convert.goods.GoodsMapStruct;
 import com.plusl.framework.common.entity.OrderInfo;
 import com.plusl.framework.common.entity.User;
+import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.enums.result.Result;
 import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.framework.common.vo.GoodsVo;
 import com.plusl.framework.common.vo.OrderDetailVo;
-import com.plusl.core.service.Interface.GoodsService;
-import com.plusl.core.service.Interface.OrderService;
-import com.plusl.core.service.Interface.UserService;
+import com.plusl.web.client.GoodsClient;
+import com.plusl.web.client.OrderClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import static com.plusl.framework.common.enums.status.ResultStatus.ORDER_NOT_EXIST;
+import static com.plusl.framework.common.enums.status.ResultStatus.SESSION_ERROR;
 
 /**
  * @program: seckill-parent
@@ -27,38 +28,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     @Autowired
-    UserService userService;
+    OrderClient orderClient;
 
     @Autowired
-    OrderService orderService;
-
-    @Autowired
-    GoodsService goodsService;
+    GoodsClient goodsClient;
 
     @GetMapping("/detail")
-    public Result<OrderDetailVo> orderDetailInfo(User user, @RequestParam("orderId") long orderId) {
+    public CommonResult<OrderDetailVo> orderDetailInfo(@RequestBody User user, @RequestParam("orderId") long orderId) {
 
-        Result<OrderDetailVo> result = Result.build();
         //TODO: 以注解的方式判断user是否为null
-        if (user == null) {
-            return Result.error(ResultStatus.SESSION_ERROR);
+        if (ObjectUtil.isEmpty(user)) {
+            return CommonResult.error(SESSION_ERROR.getCode(), SESSION_ERROR.getMessage());
         }
 
-        OrderInfo order = orderService.getOrderById(orderId);
+        OrderInfo order = orderClient.getOrderById(orderId);
         if (order == null) {
-            return Result.error(ResultStatus.ORDER_NOT_EXIST);
+            return CommonResult.error(ORDER_NOT_EXIST.getCode(), ORDER_NOT_EXIST.getMessage());
         }
 
         long goodsId = order.getGoodsId();
-        GoodsVo goods = GoodsMapStruct.INSTANCE.convert(goodsService.getGoodsDoByGoodsId(goodsId));
+        GoodsVo goods = GoodsMapStruct.INSTANCE.convert(goodsClient.getGoodsDTOByGoodsId(goodsId));
 
         OrderDetailVo orderDetailVo = new OrderDetailVo();
         orderDetailVo.setOrder(order);
         orderDetailVo.setGoods(goods);
-        result.setData(orderDetailVo);
 
-
-        return result;
+        return CommonResult.success(orderDetailVo);
     }
 
 }

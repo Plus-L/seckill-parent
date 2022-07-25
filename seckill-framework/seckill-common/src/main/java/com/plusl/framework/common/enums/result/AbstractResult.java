@@ -11,7 +11,7 @@ import com.plusl.framework.common.enums.status.ResultStatus;
  **/
 public class AbstractResult {
     private ResultStatus resultStatus;
-    private int code;
+    private String code;
     private String message;
 
     AbstractResult() {
@@ -45,7 +45,7 @@ public class AbstractResult {
         return this;
     }
 
-    public AbstractResult withError(int code, String message) {
+    public AbstractResult withError(String code, String message) {
         this.code = code;
         this.message = message;
         return this;
@@ -59,11 +59,11 @@ public class AbstractResult {
         return this.message == null ? this.resultStatus.getMessage() : this.message;
     }
 
-    public int getCode() {
+    public String getCode() {
         return this.code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

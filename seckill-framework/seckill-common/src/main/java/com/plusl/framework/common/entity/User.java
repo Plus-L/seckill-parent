@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,8 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Alias("User")
-public class User {
-
+public class User implements Serializable {
     private Long id;
     private String nickname;
     private String password;
@@ -29,5 +29,4 @@ public class User {
     private Date registerDate;
     private Date lastLoginDate;
     private Integer loginCount;
-
 }
