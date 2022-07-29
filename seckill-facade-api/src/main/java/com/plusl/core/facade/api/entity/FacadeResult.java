@@ -34,11 +34,11 @@ public class FacadeResult<T> implements Serializable {
     }
 
     public static <T> FacadeResult<T> fail(String message, T data) {
-        return new FacadeResult<>("500", message, null, data);
+        return new FacadeResult<>("400", message, null, data);
     }
 
     public static <T> FacadeResult<T> fail(Exception e) {
-        return new FacadeResult<>("500", "失败", e.getMessage(), null);
+        return new FacadeResult<>("400", "失败", e.getMessage(), null);
     }
 
     /**

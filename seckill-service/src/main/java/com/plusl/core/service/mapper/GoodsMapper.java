@@ -29,11 +29,11 @@ public interface GoodsMapper {
     GoodsDO getGoodsDoByGoodsId(@Param("goodsId") long goodsId);
 
     /**
-     * 减少库存
+     * 减少库存,已修改为乐观锁
      *
      * @param seckillGoods 消杀商品
      * @return 减少后的库存
      */
-    int reduceStock(SeckillGoods seckillGoods);
+    int reduceOneStock(SeckillGoods seckillGoods);
 
 }

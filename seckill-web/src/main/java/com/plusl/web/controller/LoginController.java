@@ -3,7 +3,6 @@ package com.plusl.web.controller;
 import com.plusl.framework.common.dto.UserLoginDTO;
 import com.plusl.framework.common.dto.UserWithTokenDTO;
 import com.plusl.framework.common.enums.result.CommonResult;
-import com.plusl.framework.common.redis.UserKey;
 import com.plusl.framework.common.vo.LoginVo;
 import com.plusl.web.client.UserClient;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import static com.plusl.framework.common.redis.RedisConstant.USER_EXPIRE_TIME;
 
 
 /**
@@ -51,7 +52,7 @@ public class LoginController {
 
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, userWithTokenDTO.getToken());
         //设置有效期
-        cookie.setMaxAge(UserKey.token.expireSeconds());
+        cookie.setMaxAge(USER_EXPIRE_TIME.intValue());
         cookie.setPath("/");
         response.addCookie(cookie);
         return CommonResult.success(userWithTokenDTO);
@@ -65,7 +66,7 @@ public class LoginController {
         String token = userClient.createToken(userLoginDTO);
         Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
         //设置有效期
-        cookie.setMaxAge(UserKey.token.expireSeconds());
+        cookie.setMaxAge(USER_EXPIRE_TIME.intValue());
         cookie.setPath("/");
         response.addCookie(cookie);
         return token;

@@ -9,6 +9,8 @@ import org.springframework.util.Assert;
 import java.io.Serializable;
 import java.util.Objects;
 
+import static com.plusl.framework.common.enums.status.ResultStatus.SUCCESS;
+
 /**
  * @program: seckill-parent
  * @description: 通用返回
@@ -23,13 +25,14 @@ public class CommonResult<T> implements Serializable {
      */
     private String code;
     /**
+     * 错误提示，用户可阅读
+     */
+    private String message;
+    /**
      * 返回数据
      */
     private T data;
-    /**
-     * 错误提示，用户可阅读
-     */
-    private String msg;
+
 
     /**
      * 将传入的 result 对象，转换成另外一个泛型结果的对象
@@ -41,14 +44,14 @@ public class CommonResult<T> implements Serializable {
      * @return 新的 CommonResult 对象
      */
     public static <T> CommonResult<T> error(CommonResult<?> result) {
-        return error(result.getCode(), result.getMsg());
+        return error(result.getCode(), result.getMessage());
     }
 
     public static <T> CommonResult<T> error(String code, String message) {
-        Assert.isTrue(!ResultStatus.SUCCESS.getCode().equals(code), "调用error方法时传入code不能为success的code");
+        Assert.isTrue(!SUCCESS.getCode().equals(code), "调用error方法时传入code不能为success的code");
         CommonResult<T> result = new CommonResult<>();
         result.code = code;
-        result.msg = message;
+        result.message = message;
         return result;
     }
 
@@ -58,14 +61,14 @@ public class CommonResult<T> implements Serializable {
 
     public static <T> CommonResult<T> success(T data) {
         CommonResult<T> result = new CommonResult<>();
-        result.code = ResultStatus.SUCCESS.getCode();
+        result.code = SUCCESS.getCode();
         result.data = data;
-        result.msg = "";
+        result.message = SUCCESS.getMessage();
         return result;
     }
 
     public static boolean isSuccess(String code) {
-        return Objects.equals(code, ResultStatus.SUCCESS.getCode());
+        return Objects.equals(code, SUCCESS.getCode());
     }
 
     @JsonIgnore // 避免 jackson 序列化
@@ -88,7 +91,7 @@ public class CommonResult<T> implements Serializable {
             return;
         }
         // 业务异常
-        throw new GlobalException(code, msg);
+        throw new GlobalException(code, message);
     }
 
     /**

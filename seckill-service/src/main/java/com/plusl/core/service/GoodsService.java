@@ -1,6 +1,7 @@
 package com.plusl.core.service;
 
 import com.plusl.framework.common.dto.GoodsDTO;
+import com.plusl.framework.common.entity.SeckillGoods;
 
 import java.util.List;
 
@@ -10,7 +11,6 @@ import java.util.List;
  * @author: PlusL
  * @create: 2022-07-11 10:47
  **/
-
 public interface GoodsService {
 
     /**
@@ -31,16 +31,23 @@ public interface GoodsService {
     /**
      * 减少库存
      *
-     * @param goodsId 商品实体dto
+     * @param seckillGoods 商品实体dto
      * @return 是否成功
      */
-    Boolean reduceStock(Long goodsId);
+    Boolean reduceOneStock(SeckillGoods seckillGoods);
 
     /**
      * 初始化设置商品库存到缓存中，方便进行后续预减库存操作
      * @param goodsDTO 商品dtp
-     * @return
+     * @return 布尔
      */
     Boolean initSetGoodsMock(GoodsDTO goodsDTO);
+
+    /**
+     * 删除库存缓存
+     * @param goodsId 商品ID
+     * @return 布尔值
+     */
+    Boolean delStockCountCache(Long goodsId);
 
 }

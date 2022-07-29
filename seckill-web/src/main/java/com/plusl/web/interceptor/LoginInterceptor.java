@@ -5,8 +5,6 @@ import com.alibaba.fastjson.JSON;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.enums.result.Result;
 import com.plusl.framework.common.enums.status.ResultStatus;
-import com.plusl.framework.common.redis.RedisUtil;
-import com.plusl.framework.common.redis.UserKey;
 import com.plusl.framework.common.utils.UserContext;
 import com.plusl.web.client.UserClient;
 import org.apache.commons.lang3.StringUtils;
@@ -23,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
 import static com.plusl.framework.common.constant.CommonConstant.COOKIE_NAME_TOKEN;
-import static com.plusl.framework.common.enums.status.ResultStatus.ACCESS_LIMIT_REACHED;
 import static com.plusl.framework.common.enums.status.ResultStatus.SESSION_ERROR;
+import static com.plusl.framework.common.redis.RedisConstant.USER_EXPIRE_TIME;
 
 
 /**
@@ -109,7 +107,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (!ObjectUtil.isEmpty(user)) {
             Cookie cookie = new Cookie(COOKIE_NAME_TOKEN, token);
             //设置有效期
-            cookie.setMaxAge(UserKey.token.expireSeconds());
+            cookie.setMaxAge(USER_EXPIRE_TIME.intValue());
             cookie.setPath("/");
             response.addCookie(cookie);
         }

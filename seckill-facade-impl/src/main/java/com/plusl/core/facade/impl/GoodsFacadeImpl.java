@@ -1,9 +1,13 @@
 package com.plusl.core.facade.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.fastjson.JSON;
 import com.plusl.core.facade.api.GoodsFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
 import com.plusl.core.service.GoodsService;
+import com.plusl.framework.common.convert.goods.GoodsMapStruct;
 import com.plusl.framework.common.dto.GoodsDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -29,6 +33,7 @@ public class GoodsFacadeImpl implements GoodsFacade {
     GoodsService goodsService;
 
     @Override
+    @SentinelResource(blockHandler = "blockHandlerForGetGoodsDTOList")
     public FacadeResult<List<GoodsDTO>> getGoodsDTOList() {
 
         try {
@@ -44,7 +49,8 @@ public class GoodsFacadeImpl implements GoodsFacade {
     }
 
     @Override
-    public FacadeResult<GoodsDTO> getGoodsDTOByGoodsId(Long goodsId) {
+    @SentinelResource(blockHandler = "blockHandlerForGetGoodsDTOByGoodsId")
+    public FacadeResult<GoodsDTO> getGoodsDtoByGoodsId(Long goodsId) {
 
         try {
             GoodsDTO goodsDTO = goodsService.getGoodsDoByGoodsId(goodsId);
@@ -59,8 +65,10 @@ public class GoodsFacadeImpl implements GoodsFacade {
     }
 
     @Override
+    @SentinelResource(blockHandler = "blockHandlerForReduceStockByGoodsId")
     public FacadeResult<Boolean> reduceStockByGoodsId(Long goodsId) {
-        Boolean isOk = goodsService.reduceStock(goodsId);
+        GoodsDTO goodsDTO = goodsService.getGoodsDoByGoodsId(goodsId);
+        Boolean isOk = goodsService.reduceOneStock(GoodsMapStruct.INSTANCE.toSeckillGoods(goodsDTO));
         if (isOk) {
             return FacadeResult.success(true);
         } else {
@@ -80,4 +88,28 @@ public class GoodsFacadeImpl implements GoodsFacade {
         }
     }
 
+    public FacadeResult<List<GoodsDTO>> blockHandlerForGetGoodsDTOList(BlockException e) {
+        FacadeResult<List<GoodsDTO>> facadeResult = fail();
+        log.warn("获取商品列表信息 触发流控 返回信息 : {}", JSON.toJSONString(facadeResult), e);
+        return facadeResult;
+    }
+
+    public FacadeResult<GoodsDTO> getGoodsDTOByGoodsId(Long goodsId, BlockException e) {
+        FacadeResult<GoodsDTO> facadeResult = fail();
+        log.warn("获取商品列表信息 触发流控 请求信息 : {} 返回信息 : {}", JSON.toJSONString(goodsId), JSON.toJSONString(facadeResult), e);
+        return facadeResult;
+    }
+
+    public FacadeResult<Boolean> blockHandlerForReduceStockByGoodsId(Long goodsId, BlockException e) {
+        FacadeResult<Boolean> facadeResult = fail();
+        log.warn("通过商品ID削减库存 触发流控 请求信息 : {}  返回信息 : {}",JSON.toJSONString(goodsId) , JSON.toJSONString(facadeResult), e);
+        return facadeResult;
+    }
+
+    private FacadeResult fail() {
+        FacadeResult result = new FacadeResult();
+        result.setErrorCode(NET_BUSY.getCode());
+        result.setMessage(NET_BUSY.getMessage());
+        return result;
+    }
 }

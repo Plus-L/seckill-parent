@@ -2,23 +2,23 @@ package com.plusl.core.service.impl;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import com.plusl.core.service.UserService;
+import com.plusl.core.service.mapper.UserMapper;
 import com.plusl.framework.common.dto.UserLoginDTO;
 import com.plusl.framework.common.dto.UserWithTokenDTO;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.exception.GlobalException;
+import com.plusl.framework.common.redis.RedisKeyUtils;
 import com.plusl.framework.common.redis.RedisUtil;
-import com.plusl.framework.common.redis.UserKey;
 import com.plusl.framework.common.utils.UUIDUtil;
-import com.plusl.core.service.UserService;
-import com.plusl.core.service.mapper.UserMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.plusl.framework.common.enums.status.ResultStatus.*;
+import static com.plusl.framework.common.redis.RedisConstant.USER_EXPIRE_TIME;
 
 /**
  * @program: seckill-parent
@@ -27,7 +27,6 @@ import static com.plusl.framework.common.enums.status.ResultStatus.*;
  * @create: 2022-07-06 09:01
  **/
 @Service
-@DubboService(interfaceClass = UserService.class)
 public class UserServiceImpl implements UserService {
 
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
         //生成cookie 将session返回游览器 分布式session
         String token = UUIDUtil.uuid();
 
-        redisUtil.set(UserKey.token, token, user);
+        redisUtil.set(RedisKeyUtils.getPrefixUserToken(token), user, USER_EXPIRE_TIME);
         UserWithTokenDTO userWithTokenDTO = new UserWithTokenDTO();
         userWithTokenDTO.setUser(user);
         userWithTokenDTO.setToken(token);
@@ -86,7 +85,7 @@ public class UserServiceImpl implements UserService {
         }
         //生成cookie 将session返回游览器 分布式session
         String token = UUIDUtil.uuid();
-        redisUtil.set(UserKey.token, token, user);
+        redisUtil.set(RedisKeyUtils.getPrefixUserToken(token), user, USER_EXPIRE_TIME);
         return token;
     }
 
@@ -97,9 +96,9 @@ public class UserServiceImpl implements UserService {
         if (StringUtils.isEmpty(token)) {
             return null;
         }
-        User user = redisUtil.get(UserKey.token, token, User.class);
-        if (user != null) {
-            redisUtil.set(UserKey.token, token, user);
+        User user = redisUtil.get(RedisKeyUtils.getPrefixUserToken(token), User.class);
+        if (ObjectUtil.isEmpty(user)) {
+            return null;
         }
         return user;
 
@@ -108,14 +107,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByNickName(String nickName) {
         //取缓存
-        User user = redisUtil.get(UserKey.getByNickName, "" + nickName, User.class);
+        User user = redisUtil.get(RedisKeyUtils.getPrefixUserByName(nickName), User.class);
         if (user != null) {
             return user;
         }
         //取数据库
         user = userMapper.getByNickname(nickName);
         if (user != null) {
-            redisUtil.set(UserKey.getByNickName, "" + nickName, user);
+            redisUtil.set(RedisKeyUtils.getPrefixUserByName(nickName), user, USER_EXPIRE_TIME);
         }
         return user;
     }

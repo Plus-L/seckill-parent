@@ -36,13 +36,12 @@ public class OrderController {
     @GetMapping("/detail")
     public CommonResult<OrderDetailVo> orderDetailInfo(@RequestBody User user, @RequestParam("orderId") long orderId) {
 
-        //TODO: 以注解的方式判断user是否为null
         if (ObjectUtil.isEmpty(user)) {
             return CommonResult.error(SESSION_ERROR.getCode(), SESSION_ERROR.getMessage());
         }
 
         OrderInfo order = orderClient.getOrderById(orderId);
-        if (order == null) {
+        if (ObjectUtil.isEmpty(order)) {
             return CommonResult.error(ORDER_NOT_EXIST.getCode(), ORDER_NOT_EXIST.getMessage());
         }
 

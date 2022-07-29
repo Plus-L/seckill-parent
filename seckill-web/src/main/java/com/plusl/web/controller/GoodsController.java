@@ -2,20 +2,16 @@ package com.plusl.web.controller;
 
 import com.plusl.framework.common.convert.goods.GoodsMapStruct;
 import com.plusl.framework.common.entity.User;
-import com.plusl.framework.common.enums.result.Result;
-import com.plusl.framework.common.redis.GoodsKey;
+import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.vo.GoodsDetailVo;
 import com.plusl.framework.common.vo.GoodsVo;
 import com.plusl.web.client.GoodsClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -26,23 +22,19 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/goods")
-public class GoodsController extends BaseController {
+public class GoodsController {
 
     @Autowired
     GoodsClient goodsClient;
 
-    @RequestMapping(value = "/to_list", produces = "text/html")
-    public String getGoodsList(HttpServletRequest request, HttpServletResponse response, Model model, User user) {
-        model.addAttribute("user", user);
+    @GetMapping(value = "/to_list")
+    public CommonResult<List<GoodsVo>> getGoodsList() {
         List<GoodsVo> goodsList = GoodsMapStruct.INSTANCE.convertListDTOtoVO(goodsClient.getGoodsDTOList());
-        model.addAttribute("goodsList", goodsList);
-        return render(request, response, model, "goods_list", GoodsKey.getGoodsList, "");
+        return CommonResult.success(goodsList);
     }
 
     @GetMapping("/detail/{goodsId}")
-    public Result<GoodsDetailVo> getGoodsDetail(User user, @PathVariable("goodsId") Long goodsId) {
-
-        Result<GoodsDetailVo> result = Result.build();
+    public CommonResult<GoodsDetailVo> getGoodsDetail(User user, @PathVariable("goodsId") Long goodsId) {
 
         GoodsVo goodsVo = GoodsMapStruct.INSTANCE.convert(goodsClient.getGoodsDTOByGoodsId(goodsId));
 
@@ -70,8 +62,7 @@ public class GoodsController extends BaseController {
         vo.setUser(user);
         vo.setRemainSeconds(remainSeconds);
         vo.setSeckillStatus(seckillStatus);
-        result.setData(vo);
-        return result;
+        return CommonResult.success(vo);
     }
 
 

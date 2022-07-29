@@ -1,7 +1,7 @@
-package com.plusl.core.service.config;
+package com.plusl.web.config;
 
 import org.apache.dubbo.config.ApplicationConfig;
-import org.apache.dubbo.config.ProtocolConfig;
+import org.apache.dubbo.config.ConsumerConfig;
 import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.config.spring.context.annotation.DubboComponentScan;
 import org.springframework.context.annotation.Bean;
@@ -9,20 +9,19 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @program: seckill-parent
- * @description: Dubbo服务提供者配置
+ * @description: Dubbo远程服务消费者配置
  * @author: PlusL
- * @create: 2022-07-13 14:57
+ * @create: 2022-07-28 17:59
  **/
 @Configuration
-@DubboComponentScan("com.plusl.core")
-public class DubboProviderConfig{
+@DubboComponentScan
+public class DubboConsumerConfig {
 
     @Bean
     public ApplicationConfig applicationConfig() {
-        ApplicationConfig config = new ApplicationConfig();
-        config.setName("seckill-sentinel-provider");
-        config.setOwner("PlusL");
-        return config;
+        ApplicationConfig applicationConfig = new ApplicationConfig();
+        applicationConfig.setName("seckill-sentinel-consumer");
+        return applicationConfig;
     }
 
     @Bean
@@ -33,10 +32,8 @@ public class DubboProviderConfig{
     }
 
     @Bean
-    public ProtocolConfig protocolConfig() {
-        ProtocolConfig protocolConfig = new ProtocolConfig();
-        protocolConfig.setName("dubbo");
-        protocolConfig.setPort(20880);
-        return protocolConfig;
+    public ConsumerConfig consumerConfig() {
+        return new ConsumerConfig();
     }
+
 }

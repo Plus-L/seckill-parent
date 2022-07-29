@@ -26,7 +26,7 @@ public interface GoodsFacade {
      * @param goodsId 商品ID
      * @return 商品dto
      */
-    FacadeResult<GoodsDTO> getGoodsDTOByGoodsId(Long goodsId);
+    FacadeResult<GoodsDTO> getGoodsDtoByGoodsId(Long goodsId);
 
     /**
      * 通过商品ID减库存

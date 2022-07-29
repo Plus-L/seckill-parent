@@ -3,6 +3,7 @@ package com.plusl.framework.common.convert.goods;
 
 import com.plusl.framework.common.dataobject.GoodsDO;
 import com.plusl.framework.common.dto.GoodsDTO;
+import com.plusl.framework.common.entity.SeckillGoods;
 import com.plusl.framework.common.vo.GoodsVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,6 +35,14 @@ public interface GoodsMapStruct {
      * @return 商品视图对象
      */
     GoodsVo convert(GoodsDTO goodsDTO);
+
+    /**
+     * GoodsDO -> SeckillGoods
+     * @param goodsDTO 商品DO
+     * @return 秒杀商品
+     */
+    @Mapping(source = "id", target = "goodsId")
+    SeckillGoods toSeckillGoods(GoodsDTO goodsDTO);
 
     /**
      * 商品DO列表->DTO列表

@@ -11,6 +11,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RocketMqConfig {
 
-    public static final String MIAOSHA_QUEUE = "seckill_queue";
+    public static final String DEFAULT_NAMESRV = "localhost:9876";
+
+    public static final String SECKILL_QUEUE = "seckill_queue";
+
+    public static final String DELCACHE_QUEUE = "delcache_queue";
 
 }

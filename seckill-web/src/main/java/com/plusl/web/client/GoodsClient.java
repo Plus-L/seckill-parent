@@ -28,7 +28,7 @@ public class GoodsClient {
     }
 
     public GoodsDTO getGoodsDTOByGoodsId(Long goodsId) {
-        FacadeResult<GoodsDTO> result = goodsFacade.getGoodsDTOByGoodsId(goodsId);
+        FacadeResult<GoodsDTO> result = goodsFacade.getGoodsDtoByGoodsId(goodsId);
         Assert.isSuccess(result);
         return result.getData();
     }

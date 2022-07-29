@@ -20,6 +20,7 @@ public enum ResultStatus {
     EXCEPTION("-1", "系统异常"),
     PARAM_ERROR("10000", "参数错误"),
     SYSTEM_ERROR("10001", "系统错误"),
+    NET_BUSY("10010", "网络繁忙，请稍后再试"),
     FILE_NOT_EXIST("10002", "文件不存在"),
     FILE_NOT_DOWNLOAD("10003", "文件没有下载"),
     FILE_NOT_GENERATE("10004", "文件没有生成"),
@@ -69,6 +70,7 @@ public enum ResultStatus {
     REPEATE_SECKILL("40002", "不能重复秒杀"),
     SECKILL_FAIL("40003", "秒杀失败"),
     GET_RESULT_ERROR("40004", "获取结果失败，请稍后再试"),
+    SECKILL_SUCCESS("40000", "恭喜，秒杀成功~"),
 
     /**
      * 商品模块

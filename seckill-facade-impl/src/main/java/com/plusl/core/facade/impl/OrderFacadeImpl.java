@@ -1,6 +1,9 @@
 package com.plusl.core.facade.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.alibaba.fastjson.JSON;
 import com.plusl.core.facade.api.OrderFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
 import com.plusl.core.service.OrderService;
@@ -58,6 +61,7 @@ public class OrderFacadeImpl implements OrderFacade {
     }
 
     @Override
+    @SentinelResource(blockHandler = "blockHandlerForCreateOrder")
     public FacadeResult<OrderInfo> createOrder(User user, GoodsDTO goods) {
         try {
             OrderInfo order = orderService.createOrder(user, goods);
@@ -69,5 +73,18 @@ public class OrderFacadeImpl implements OrderFacade {
             log.warn("方法 [createOrder] 创建订单异常 异常信息：", e);
             return FacadeResult.fail(CREAT_ORDER_FAIL.getCode(), CREAT_ORDER_FAIL.getMessage());
         }
+    }
+
+    public FacadeResult blockHandlerForCreateOrder(User user, GoodsDTO goodsDTO, BlockException e) {
+        FacadeResult facadeResult = fail();
+        log.warn("创建订单 触发流控 请求信息 : {} {} 返回信息 : {}", JSON.toJSONString(user), JSON.toJSONString(goodsDTO), JSON.toJSONString(facadeResult), e);
+        return facadeResult;
+    }
+
+    private FacadeResult fail() {
+        FacadeResult result = new FacadeResult();
+        result.setErrorCode(NET_BUSY.getCode());
+        result.setMessage(NET_BUSY.getMessage());
+        return result;
     }
 }

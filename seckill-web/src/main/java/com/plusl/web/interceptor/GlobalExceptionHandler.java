@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         if (e instanceof GlobalException) {
             GlobalException ex = (GlobalException) e;
-            //TODO: 统一返回类待处理
+            //TODO: 统一返回类待处理 // 已停用当前handler
             return Result.error(SYSTEM_ERROR);
         } else if (e instanceof org.springframework.validation.BindException) {
             org.springframework.validation.BindException ex = (BindException) e;

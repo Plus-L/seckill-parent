@@ -33,10 +33,13 @@
         WHERE seckill_goods.goods_id = #{goodsId,jdbcType=BIGINT}
     </select>
 
-    <update id="reduceStock">
+    <update id="reduceOneStock" parameterType="com.plusl.framework.common.entity.SeckillGoods">
         update seckill_goods
-        set stock_count = stock_count - 1
+        <set>
+        stock_count = stock_count - 1
+        </set>
         where goods_id = #{goodsId}
-          and stock_count > 0
+        and stock_count = #{stockCount}
+        and stock_count > 0
     </update>
 </mapper>

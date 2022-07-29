@@ -2,7 +2,7 @@ package com.plusl.core.facade.impl;
 
 import com.plusl.core.facade.api.RocketMqFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
-import com.plusl.core.service.rocketmq.MqProducer;
+import com.plusl.core.service.rocketmq.seckill.SeckillMqProducer;
 import com.plusl.framework.common.dto.SeckillMessageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -24,13 +24,13 @@ import static com.plusl.framework.common.enums.status.ResultStatus.SEND_SUCCESS;
 public class RocketMqFacadeImpl implements RocketMqFacade {
 
     @Autowired
-    MqProducer mqProducer;
+    SeckillMqProducer seckillMqProducer;
 
     @Override
     public FacadeResult<String> sendSeckillMessage(SeckillMessageDTO seckillMessageDTO) {
 
         try {
-            mqProducer.sendSeckillMessage(seckillMessageDTO);
+            seckillMqProducer.sendSeckillMessage(seckillMessageDTO);
             return FacadeResult.success(SEND_SUCCESS.getMessage());
         } catch (Exception e) {
             log.warn("RocketMQ发送消息失败，详细信息如下：", e);

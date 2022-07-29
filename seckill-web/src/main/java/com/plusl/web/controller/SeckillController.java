@@ -5,8 +5,7 @@ import com.plusl.framework.common.dto.SeckillMessageDTO;
 import com.plusl.framework.common.entity.SeckillOrder;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
-import com.plusl.framework.common.redis.GoodsKey;
-import com.plusl.framework.common.redis.RedisUtil;
+import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.web.client.GoodsClient;
 import com.plusl.web.client.OrderClient;
 import com.plusl.web.client.RocketMqClient;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.plusl.framework.common.enums.status.ResultStatus.REPEATE_SECKILL;
-import static com.plusl.framework.common.enums.status.ResultStatus.SECKILL_OVER;
 
 /**
  * @program: seckill-parent
@@ -44,9 +42,6 @@ public class SeckillController implements InitializingBean {
     @Autowired
     OrderClient orderClient;
 
-//    @Autowired
-//    RedisUtil redisUtil;
-
     /**
      * 执行秒杀，异步请求秒杀
      * RequireLogin限制了两点：1.单一用户单位时间内能点击的次数限制 2.当前接口是否需要登录才能访问
@@ -55,22 +50,17 @@ public class SeckillController implements InitializingBean {
      * @param goodsId 商品ID
      * @return 规范化Json返回值
      */
-    @RequireLogin(seconds = 5, maxCount = 5, needLogin = false)
+    @RequireLogin(seconds = 5, maxCount = 5, needLogin = true)
     @PostMapping(value = "/doseckill")
     public CommonResult<String> doSeckill(@RequestBody User user, @RequestParam("goodsId") Long goodsId) {
 
         //判断是否已经秒杀到了,防止重复秒杀
-        SeckillOrder order = orderClient.preventRepeatedSeckill(user.getId(), goodsId);
+/*        SeckillOrder order = orderClient.preventRepeatedSeckill(user.getId(), goodsId);
         if (order != null) {
             return CommonResult.error(REPEATE_SECKILL);
-        }
+        }*/
 
         //TODO: 如何保证数据库与缓存的一致性
-        //预减库存
-//        Long stock = redisUtil.decr(GoodsKey.getSeckillGoodsStock, "" + goodsId);
-//        if (stock < 0) {
-//            return CommonResult.error(SECKILL_OVER);
-//        }
 
         SeckillMessageDTO seckillMessageDTO = new SeckillMessageDTO();
         seckillMessageDTO.setGoodsId(goodsId);
@@ -79,13 +69,27 @@ public class SeckillController implements InitializingBean {
         return CommonResult.success(seckillMessage);
     }
 
+    /**
+     * 获取秒杀结果
+     * @param model 模板
+     * @param user 用户实体
+     * @param goodsId 商品Id
+     * @return 秒杀结果 成功返回订单ID  失败：（1）.商品库存空失败-返回0 （2）.异常导致失败-返回-1
+     */
     @RequireLogin(seconds = 5, maxCount = 5, needLogin = false)
     @GetMapping(value = "/result")
-    public CommonResult<Long> getSeckillResult(Model model, User user,
+    public CommonResult<String> getSeckillResult(Model model, User user,
                                          @RequestParam("goodsId") long goodsId) {
         model.addAttribute("user", user);
-        Long seckillResult = seckillClient.getSeckillResult(user.getId(), goodsId);
-        return CommonResult.success(seckillResult);
+        Long resultCode = seckillClient.getSeckillResult(user.getId(), goodsId);
+        if (resultCode.equals(0L)) {
+            return CommonResult.error(ResultStatus.SECKILL_OVER);
+        }
+        if (resultCode.equals(-1L)) {
+            return CommonResult.error(ResultStatus.SECKILL_FAIL);
+        }
+
+        return CommonResult.success(ResultStatus.SECKILL_SUCCESS.getMessage());
     }
 
     /**
