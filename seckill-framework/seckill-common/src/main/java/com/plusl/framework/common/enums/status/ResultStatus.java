@@ -1,7 +1,5 @@
 package com.plusl.framework.common.enums.status;
 
-import cn.hutool.core.util.ObjectUtil;
-
 /**
  * @program: seckill-parent
  * @description: status enum

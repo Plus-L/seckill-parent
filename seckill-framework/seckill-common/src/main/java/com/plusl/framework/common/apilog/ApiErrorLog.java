@@ -25,7 +25,6 @@ public class ApiErrorLog {
     /**
      * 用户类型
      */
-//    private Integer userType;
 
     /**
      * 应用名

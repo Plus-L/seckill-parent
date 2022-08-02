@@ -3,7 +3,7 @@ package com.plusl.web.controller;
 import com.plusl.framework.common.dto.UserLoginDTO;
 import com.plusl.framework.common.dto.UserWithTokenDTO;
 import com.plusl.framework.common.enums.result.CommonResult;
-import com.plusl.framework.common.vo.LoginVo;
+import com.plusl.web.vo.LoginVo;
 import com.plusl.web.client.UserClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import static com.plusl.framework.common.redis.RedisConstant.USER_EXPIRE_TIME;
+import static com.plusl.framework.redis.constant.RedisConstant.USER_EXPIRE_TIME;
 
 
 /**

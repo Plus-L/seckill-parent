@@ -21,12 +21,44 @@ import java.util.Date;
 @NoArgsConstructor
 @Alias("User")
 public class User implements Serializable {
+
+    /**
+     * 用户ID
+     */
     private Long id;
+
+    /**
+     * 用户名/手机号
+     */
     private String nickname;
+
+    /**
+     * 密码
+     */
     private String password;
+
+    /**
+     * 盐
+     */
     private String salt;
+
+    /**
+     * 头像
+     */
     private String head;
+
+    /**
+     * 注册时间
+     */
     private Date registerDate;
+
+    /**
+     * 最后登录时间
+     */
     private Date lastLoginDate;
+
+    /**
+     * 登录计数（未使用）
+     */
     private Integer loginCount;
 }

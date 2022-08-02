@@ -1,11 +1,11 @@
 package com.plusl.web.controller;
 
-import com.plusl.framework.common.convert.goods.GoodsMapStruct;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
-import com.plusl.framework.common.vo.GoodsDetailVo;
-import com.plusl.framework.common.vo.GoodsVo;
+import com.plusl.web.vo.GoodsDetailVo;
+import com.plusl.web.vo.GoodsVo;
 import com.plusl.web.client.GoodsClient;
+import com.plusl.web.mapstruct.GoodsMapStruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

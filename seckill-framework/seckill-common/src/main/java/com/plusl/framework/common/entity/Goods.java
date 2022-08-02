@@ -19,12 +19,39 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Goods implements Serializable {
 
-    private Long id;
+    /**
+     * 商品ID
+     */
+    private Long goodsId;
+
+    /**
+     * 商品名称
+     */
     private String goodsName;
+
+    /**
+     * 商品标签
+     */
     private String goodsTitle;
+
+    /**
+     * 商品图片
+     */
     private String goodsImg;
+
+    /**
+     * 商品细节
+     */
     private String goodsDetail;
+
+    /**
+     * 商品价格
+     */
     private Double goodsPrice;
+
+    /**
+     * 商品库存
+     */
     private Integer goodsStock;
 
 }

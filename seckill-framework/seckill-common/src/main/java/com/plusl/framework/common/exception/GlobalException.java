@@ -43,7 +43,7 @@ public class GlobalException extends RuntimeException {
         this(FAIL_CODE, null, cause);
     }
 
-    public GlobalException(Throwable cause, String errorMessage){
+    public GlobalException(Throwable cause, String errorMessage) {
         this(FAIL_CODE, errorMessage, cause);
     }
 

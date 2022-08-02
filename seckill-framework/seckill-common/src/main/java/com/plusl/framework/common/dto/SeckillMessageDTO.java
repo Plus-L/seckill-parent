@@ -19,7 +19,14 @@ import java.io.Serializable;
 @ToString
 public class SeckillMessageDTO implements Serializable {
 
+    /**
+     * 用户实体
+     */
     private User user;
+
+    /**
+     * 商品ID
+     */
     private Long goodsId;
 
 }

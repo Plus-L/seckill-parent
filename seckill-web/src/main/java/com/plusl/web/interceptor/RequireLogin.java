@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(METHOD)
 public @interface RequireLogin {
 
-    int seconds();
+    long seconds();
 
     int maxCount();
 

@@ -3,7 +3,6 @@ package com.plusl.web.config;
 import com.plusl.framework.common.exception.handler.GlobalExceptionHandler;
 import com.plusl.web.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -18,7 +17,7 @@ import java.util.List;
 @Configuration
 public class AutoWebConfiguration implements WebMvcConfigurer {
 
-    final String[] notLoginInterceptPaths = {"/checkPasswordAndLogin/**"};
+    final String[] notLoginInterceptPaths = {"/login/**"};
 
     @Autowired
     UserArgumentResolver resolver;

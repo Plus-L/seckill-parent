@@ -2,7 +2,6 @@ package com.plusl.web.controller;
 
 import com.plusl.framework.common.dto.GoodsDTO;
 import com.plusl.framework.common.dto.SeckillMessageDTO;
-import com.plusl.framework.common.entity.SeckillOrder;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.enums.status.ResultStatus;
@@ -16,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
-
-import static com.plusl.framework.common.enums.status.ResultStatus.REPEATE_SECKILL;
 
 /**
  * @program: seckill-parent
@@ -71,15 +69,16 @@ public class SeckillController implements InitializingBean {
 
     /**
      * 获取秒杀结果
-     * @param model 模板
-     * @param user 用户实体
+     *
+     * @param model   模板
+     * @param user    用户实体
      * @param goodsId 商品Id
      * @return 秒杀结果 成功返回订单ID  失败：（1）.商品库存空失败-返回0 （2）.异常导致失败-返回-1
      */
     @RequireLogin(seconds = 5, maxCount = 5, needLogin = false)
     @GetMapping(value = "/result")
     public CommonResult<String> getSeckillResult(Model model, User user,
-                                         @RequestParam("goodsId") long goodsId) {
+                                                 @RequestParam("goodsId") long goodsId) {
         model.addAttribute("user", user);
         Long resultCode = seckillClient.getSeckillResult(user.getId(), goodsId);
         if (resultCode.equals(0L)) {
@@ -96,7 +95,7 @@ public class SeckillController implements InitializingBean {
      * 系统初始化时执行，启动时将数据库中的秒杀商品数量加载到缓存中来
      */
     @Override
-    public void afterPropertiesSet(){
+    public void afterPropertiesSet() {
         List<GoodsDTO> goodsList = goodsClient.getGoodsDTOList();
         for (GoodsDTO goodsDTO : goodsList) {
             goodsClient.initSetGoodsMock(goodsDTO);

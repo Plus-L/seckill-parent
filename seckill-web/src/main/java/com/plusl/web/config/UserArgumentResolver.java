@@ -18,6 +18,7 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
 
     /**
      * 条件判断，当supportParameter返回值为true时，调用resolveArgument方法
+     *
      * @param methodParameter 方法体
      * @return true/false
      */

@@ -26,6 +26,12 @@ public class TestController {
 //    @DubboReference
 //    private DubboTestFacade dubboTestFacade;
 
+    public static void main(String[] args) {
+        Config config = ConfigService.getAppConfig();
+        String value = config.getProperty("spring.datasource.driver-class-name", "获取失败");
+        System.out.println(value);
+    }
+
     @RequestMapping("/mqtest")
     public void testRocketMq() {
 //        mqProducer.sendSeckillMessage("123456");
@@ -34,11 +40,5 @@ public class TestController {
     @PostMapping(value = "/sysHello")
     public void sysHello(String name) {
 //        System.out.println(dubboTestFacade.sysHello(name));
-    }
-
-    public static void main(String[] args) {
-        Config config = ConfigService.getAppConfig();
-        String value = config.getProperty("spring.datasource.driver-class-name", "获取失败");
-        System.out.println(value);
     }
 }

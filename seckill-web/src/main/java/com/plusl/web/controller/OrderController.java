@@ -1,16 +1,14 @@
 package com.plusl.web.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.plusl.framework.common.convert.goods.GoodsMapStruct;
 import com.plusl.framework.common.entity.OrderInfo;
 import com.plusl.framework.common.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
-import com.plusl.framework.common.enums.result.Result;
-import com.plusl.framework.common.enums.status.ResultStatus;
-import com.plusl.framework.common.vo.GoodsVo;
-import com.plusl.framework.common.vo.OrderDetailVo;
+import com.plusl.web.vo.GoodsVo;
+import com.plusl.web.vo.OrderDetailVo;
 import com.plusl.web.client.GoodsClient;
 import com.plusl.web.client.OrderClient;
+import com.plusl.web.mapstruct.GoodsMapStruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -19,7 +19,7 @@ import java.util.Collections;
 @EnableDubbo
 @EnableApolloConfig
 @MapperScan("com.plusl.core.service.mapper")
-@SpringBootApplication(scanBasePackages = {"com.plusl.web"})
+@SpringBootApplication(scanBasePackages = {"com.plusl.web","com.plusl.framework.redis"})
 public class SeckillWebApplication {
 
     private static final String RES_KEY = "com.plusl.core.service.SeckillService:createOrderAndReduceStock(User, GoodsDTO)";

@@ -9,6 +9,9 @@ package com.plusl.framework.common.constant;
  **/
 public class CommonConstant {
 
+    /**
+     * token
+     */
     public static final String COOKIE_NAME_TOKEN = "TOKEN";
 
 }

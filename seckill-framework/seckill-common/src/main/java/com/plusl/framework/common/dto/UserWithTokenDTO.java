@@ -19,8 +19,15 @@ import java.io.Serializable;
 @ToString
 public class UserWithTokenDTO implements Serializable {
 
+    /**
+     * 用户实体
+     */
     @NotEmpty
     private User user;
+
+    /**
+     * token
+     */
     @NotEmpty
     private String token;
 

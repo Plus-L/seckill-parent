@@ -3,9 +3,10 @@ package com.plusl.web.interceptor;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.plusl.framework.common.entity.User;
-import com.plusl.framework.common.enums.result.Result;
+import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.framework.common.utils.UserContext;
+import com.plusl.framework.redis.RedisUtil;
 import com.plusl.web.client.UserClient;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,8 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 
 import static com.plusl.framework.common.constant.CommonConstant.COOKIE_NAME_TOKEN;
+import static com.plusl.framework.common.enums.status.ResultStatus.ACCESS_LIMIT_REACHED;
 import static com.plusl.framework.common.enums.status.ResultStatus.SESSION_ERROR;
-import static com.plusl.framework.common.redis.RedisConstant.USER_EXPIRE_TIME;
+import static com.plusl.framework.redis.constant.RedisConstant.USER_EXPIRE_TIME;
 
 
 /**
@@ -37,14 +39,11 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     UserClient userClient;
 
-//    @Autowired
-//    RedisUtil redisUtil;
+    @Autowired
+    RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        /**
-         * 获取调用 获取主要方法
-         */
         try {
             if (handler instanceof HandlerMethod) {
                 HandlerMethod hm = (HandlerMethod) handler;
@@ -54,7 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 if (accessLimit == null) {
                     return true;
                 }
-                int seconds = accessLimit.seconds();
+                Long seconds = accessLimit.seconds();
                 int maxCount = accessLimit.maxCount();
                 boolean needLogin = accessLimit.needLogin();
                 String key = request.getRequestURI();
@@ -65,19 +64,18 @@ public class LoginInterceptor implements HandlerInterceptor {
                     }
                     key += "_" + user.getNickname();
                 }
-//                AccessKey ak = AccessKey.withExpire(seconds);
-//                Integer count = redisUtil.get(ak, key, Integer.class);
-//                if (count == null) {
-//                    redisUtil.set(ak, key, 1);
-//                } else if (count < maxCount) {
-//                    redisUtil.incr(ak, key);
-//                } else {
-//                    render(response, ACCESS_LIMIT_REACHED);
-//                    return false;
-//                }
+                Integer count = redisUtil.get(key, Integer.class);
+                if (count == null) {
+                    redisUtil.set(key, 1, seconds);
+                } else if (count < maxCount) {
+                    redisUtil.incr(key);
+                } else {
+                    render(response, ACCESS_LIMIT_REACHED);
+                    return false;
+                }
             }
         } catch (Exception e) {
-            logger.error("loginInterceptor主要方法异常", e);
+            logger.error("方法 [loginInterceptor] 捕获异常 : ", e);
         }
         return true;
     }
@@ -90,15 +88,15 @@ public class LoginInterceptor implements HandlerInterceptor {
     private void render(HttpServletResponse response, ResultStatus cm) throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         OutputStream out = response.getOutputStream();
-        String str = JSON.toJSONString(Result.error(cm));
+        String str = JSON.toJSONString(CommonResult.error(cm));
         out.write(str.getBytes("UTF-8"));
         out.flush();
         out.close();
     }
 
     private User getUser(HttpServletRequest request, HttpServletResponse response) {
-        String paramToken = request.getParameter("TOKEN");
-        String cookieToken = getCookieValue(request, "TOKEN");
+        String paramToken = request.getParameter(COOKIE_NAME_TOKEN);
+        String cookieToken = getCookieValue(request, COOKIE_NAME_TOKEN);
         if (StringUtils.isEmpty(cookieToken) && StringUtils.isEmpty(paramToken)) {
             return null;
         }
@@ -114,13 +112,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         return user;
     }
 
-    private String getCookieValue(HttpServletRequest request, String cookiName) {
+    private String getCookieValue(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length <= 0) {
             return null;
         }
         for (Cookie cookie : cookies) {
-            if (cookie.getName().equals(cookiName)) {
+            if (cookie.getName().equals(cookieName)) {
                 return cookie.getValue();
             }
         }

@@ -18,8 +18,23 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class GoodsDTO extends Goods implements Serializable {
+    /**
+     * 秒杀价格
+     */
     private Double seckillPrice;
+
+    /**
+     * 秒杀商品库存
+     */
     private Integer stockCount;
+
+    /**
+     * 开始时间
+     */
     private Date startDate;
+
+    /**
+     * 结束时间
+     */
     private Date endDate;
 }
