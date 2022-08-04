@@ -3,7 +3,7 @@ package com.plusl.core.facade.impl;
 import com.plusl.core.facade.api.RocketMqFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
 import com.plusl.core.service.rocketmq.seckill.SeckillMqProducer;
-import com.plusl.framework.common.dto.SeckillMessageDTO;
+import com.plusl.core.facade.api.entity.dto.SeckillMessageDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;

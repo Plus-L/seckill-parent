@@ -19,7 +19,7 @@ import java.util.Collections;
 @EnableDubbo
 @EnableApolloConfig
 @MapperScan("com.plusl.core.service.mapper")
-@SpringBootApplication(scanBasePackages = {"com.plusl.web","com.plusl.framework.redis"})
+@SpringBootApplication(scanBasePackages = {"com.plusl.web", "com.plusl.framework.redis"})
 public class SeckillWebApplication {
 
     private static final String RES_KEY = "com.plusl.core.service.SeckillService:createOrderAndReduceStock(User, GoodsDTO)";
@@ -40,6 +40,7 @@ public class SeckillWebApplication {
         FlowRule flowRule = new FlowRule();
         flowRule.setResource(RES_KEY);
         flowRule.setCount(5);
+
         flowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);
         flowRule.setLimitApp("default");
         FlowRuleManager.loadRules(Collections.singletonList(flowRule));

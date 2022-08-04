@@ -3,12 +3,12 @@ package com.plusl.core.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
+import com.plusl.core.facade.api.entity.SeckillGoods;
 import com.plusl.core.service.GoodsService;
 import com.plusl.core.service.convert.goods.GoodsMapStruct;
 import com.plusl.core.service.mapper.GoodsMapper;
 import com.plusl.core.service.dataobject.GoodsDO;
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.SeckillGoods;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import com.plusl.framework.redis.RedisKeyUtils;
 import com.plusl.framework.redis.RedisUtil;
 import lombok.extern.slf4j.Slf4j;

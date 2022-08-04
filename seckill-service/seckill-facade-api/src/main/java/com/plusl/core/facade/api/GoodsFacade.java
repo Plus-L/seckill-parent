@@ -1,7 +1,7 @@
 package com.plusl.core.facade.api;
 
 import com.plusl.core.facade.api.entity.FacadeResult;
-import com.plusl.framework.common.dto.GoodsDTO;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 
 import java.util.List;
 

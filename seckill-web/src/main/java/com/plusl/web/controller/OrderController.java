@@ -1,14 +1,14 @@
 package com.plusl.web.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.plusl.framework.common.entity.OrderInfo;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.OrderInfo;
+import com.plusl.core.facade.api.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
-import com.plusl.web.vo.GoodsVo;
-import com.plusl.web.vo.OrderDetailVo;
 import com.plusl.web.client.GoodsClient;
 import com.plusl.web.client.OrderClient;
 import com.plusl.web.mapstruct.GoodsMapStruct;
+import com.plusl.web.vo.GoodsVo;
+import com.plusl.web.vo.OrderDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +31,13 @@ public class OrderController {
     @Autowired
     GoodsClient goodsClient;
 
+    /**
+     * 获取详细订单信息
+     *
+     * @param user    用户实体
+     * @param orderId 订单ID
+     * @return CommonResult 封装订单信息VO
+     */
     @GetMapping("/detail")
     public CommonResult<OrderDetailVo> orderDetailInfo(@RequestBody User user, @RequestParam("orderId") long orderId) {
 
@@ -44,7 +51,7 @@ public class OrderController {
         }
 
         long goodsId = order.getGoodsId();
-        GoodsVo goods = GoodsMapStruct.INSTANCE.convert(goodsClient.getGoodsDTOByGoodsId(goodsId));
+        GoodsVo goods = GoodsMapStruct.INSTANCE.convert(goodsClient.getGoodsDtoByGoodsId(goodsId));
 
         OrderDetailVo orderDetailVo = new OrderDetailVo();
         orderDetailVo.setOrder(order);

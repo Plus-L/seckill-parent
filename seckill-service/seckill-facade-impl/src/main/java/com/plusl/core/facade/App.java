@@ -31,8 +31,9 @@ public class App {
         // 还有普通的 @Component 类型和使用 javax.inject 注释的 JSR-330 兼容类。
         // 允许使用 register(Class...) 逐个注册类，以及使用 scan(String...) 进行类路径扫描
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        // 注册一个或多个要处理的组件类，注意：必须使用refresh才能使上下文更新
         context.register(DubboProviderConfig.class);
-//        context.refresh();
+        // context.refresh();
         SpringApplication.run(App.class, args);
     }
 

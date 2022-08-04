@@ -1,4 +1,4 @@
-package com.plusl.framework.common.entity;
+package com.plusl.core.facade.api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,11 +26,13 @@ public class User implements Serializable {
     /**
      * 用户ID
      */
+    @NotNull(message = "用户ID不能为空")
     private Long id;
 
     /**
      * 用户名/手机号
      */
+    @NotNull(message = "用户昵称/手机号/账号不能为空")
     private String nickname;
 
     /**

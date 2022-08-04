@@ -1,6 +1,7 @@
-package com.plusl.framework.common.utils;
+package com.plusl.web.utils;
 
-import com.plusl.framework.common.entity.User;
+
+import com.plusl.core.facade.api.entity.User;
 
 /**
  * @author LJH

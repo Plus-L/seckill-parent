@@ -20,6 +20,11 @@
             <artifactId>seckill-common</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.plusl</groupId>
+            <artifactId>seckill-facade-api</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

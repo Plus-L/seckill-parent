@@ -1,8 +1,9 @@
-package com.plusl.framework.common.dto;
+package com.plusl.core.facade.api.entity.dto;
 
-import com.plusl.framework.common.entity.Goods;
+import com.plusl.core.facade.api.entity.Goods;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,11 +22,13 @@ public class GoodsDTO extends Goods implements Serializable {
     /**
      * 秒杀价格
      */
+    @NotNull(message = "秒杀价格不能为空")
     private Double seckillPrice;
 
     /**
      * 秒杀商品库存
      */
+    @NotNull(message = "秒杀库存不能为空")
     private Integer stockCount;
 
     /**

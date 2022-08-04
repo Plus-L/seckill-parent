@@ -10,7 +10,6 @@ import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.exception.GlobalException;
 import com.plusl.framework.common.utils.ServletUtils;
 import com.plusl.framework.common.utils.TracerUtils;
-import com.plusl.framework.common.utils.UserContext;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -38,8 +37,6 @@ import static com.plusl.framework.common.enums.status.ResultStatus.*;
 
 /**
  * 全局异常处理器，将 Exception 翻译成 CommonResult + 对应的异常编号
- *
- * @author 芋道源码
  */
 @RestControllerAdvice
 @NoArgsConstructor
@@ -47,41 +44,46 @@ import static com.plusl.framework.common.enums.status.ResultStatus.*;
 public class GlobalExceptionHandler {
 
     /**
-     * 处理所有异常，主要是提供给 Filter 使用
-     * 因为 Filter 不走 SpringMVC 的流程，但是我们又需要兜底处理异常，所以这里提供一个全量的异常处理过程，保持逻辑统一。
+     * 全局异常处理类兜底
      *
      * @param request 请求
      * @param ex      异常
      * @return 通用返回
      */
     public CommonResult<?> allExceptionHandler(HttpServletRequest request, Throwable ex) {
+        /* 缺少请求字段 */
         if (ex instanceof MissingServletRequestParameterException) {
             return missingServletRequestParameterExceptionHandler((MissingServletRequestParameterException) ex);
         }
+        /* TypeMissMatch 类型不匹配异常 */
         if (ex instanceof MethodArgumentTypeMismatchException) {
             return methodArgumentTypeMismatchExceptionHandler((MethodArgumentTypeMismatchException) ex);
         }
+        /* 当对带有 @Valid 注释的参数的验证失败时抛出异常。从 5.3 开始扩展 BindException。 */
         if (ex instanceof MethodArgumentNotValidException) {
             return methodArgumentNotValidExceptionExceptionHandler((MethodArgumentNotValidException) ex);
         }
+        /* 绑定异常 */
         if (ex instanceof BindException) {
             return bindExceptionHandler((BindException) ex);
         }
+        /* 报告违反约束的结果 */
         if (ex instanceof ConstraintViolationException) {
             return constraintViolationExceptionHandler((ConstraintViolationException) ex);
         }
+        /* 校验异常 */
         if (ex instanceof ValidationException) {
             return validationException((ValidationException) ex);
         }
+        /* 未找到处理器异常 */
         if (ex instanceof NoHandlerFoundException) {
             return noHandlerFoundExceptionHandler((NoHandlerFoundException) ex);
         }
+        /* HTTP请求方法不支持 */
         if (ex instanceof HttpRequestMethodNotSupportedException) {
             return httpRequestMethodNotSupportedExceptionHandler((HttpRequestMethodNotSupportedException) ex);
         }
-//        if (ex instanceof RequestNotPermitted) {
-//            return requestNotPermittedExceptionHandler(request, (RequestNotPermitted) ex);
-//        }
+        /* 自定义业务异常 */
         if (ex instanceof GlobalException) {
             return serviceExceptionHandler((GlobalException) ex);
         }
@@ -223,7 +225,7 @@ public class GlobalExceptionHandler {
 
     private void initExceptionLog(ApiErrorLog errorLog, HttpServletRequest request, Throwable e) {
         // TODO: 处理用户信息，这里使用的是获取当前线程的ThreadLocal，欠妥
-        errorLog.setUserId(UserContext.getUser().getId());
+//        errorLog.setUserId(UserContext.getUser().getId());
 //        errorLog.setUserType(WebFrameworkUtils.getLoginUserType(request));
         // 设置异常字段
         errorLog.setExceptionName(e.getClass().getName());

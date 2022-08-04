@@ -1,8 +1,8 @@
 package com.plusl.core.service;
 
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.OrderInfo;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.OrderInfo;
+import com.plusl.core.facade.api.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 
 /**
  * @program: seckill-parent

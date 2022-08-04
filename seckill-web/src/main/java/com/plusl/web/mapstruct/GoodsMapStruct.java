@@ -1,7 +1,7 @@
 package com.plusl.web.mapstruct;
 
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.SeckillGoods;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
+import com.plusl.core.facade.api.entity.SeckillGoods;
 import com.plusl.web.vo.GoodsVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

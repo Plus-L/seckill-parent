@@ -1,13 +1,5 @@
 package com.plusl.framework.common.exception;
 
-
-/**
- * @program: seckill-parent
- * @description: 常规异常类
- * @author: PlusL
- * @create: 2022-07-06 09:27
- **/
-
 import lombok.Getter;
 
 /**

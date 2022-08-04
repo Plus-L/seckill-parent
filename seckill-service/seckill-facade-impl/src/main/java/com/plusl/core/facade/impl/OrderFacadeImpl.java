@@ -7,10 +7,10 @@ import com.alibaba.fastjson.JSON;
 import com.plusl.core.facade.api.OrderFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
 import com.plusl.core.service.OrderService;
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.OrderInfo;
-import com.plusl.framework.common.entity.SeckillOrder;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
+import com.plusl.core.facade.api.entity.OrderInfo;
+import com.plusl.core.facade.api.entity.SeckillOrder;
+import com.plusl.core.facade.api.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +33,9 @@ public class OrderFacadeImpl implements OrderFacade {
     OrderService orderService;
 
     @Override
-    public FacadeResult<OrderInfo> getOrderById(long id) {
+    public FacadeResult<OrderInfo> getOrderById(long orderId) {
         try {
-            OrderInfo orderInfo = orderService.getOrderById(id);
+            OrderInfo orderInfo = orderService.getOrderById(orderId);
             if (ObjectUtil.isEmpty(orderInfo)) {
                 return FacadeResult.fail(ORDER_NOT_EXIST.getCode(), ORDER_NOT_EXIST.getMessage());
             }

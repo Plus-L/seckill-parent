@@ -1,4 +1,4 @@
-package com.plusl.framework.common.dto;
+package com.plusl.core.facade.api.entity.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -52,11 +52,4 @@ public class UserLoginDTO implements Serializable {
         return this;
     }
 
-    @Override
-    public String toString() {
-        return "UserLoginDto{" +
-                "nickname='" + nickname + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

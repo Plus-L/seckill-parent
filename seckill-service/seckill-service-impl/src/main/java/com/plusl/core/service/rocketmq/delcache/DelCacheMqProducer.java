@@ -36,7 +36,7 @@ public class DelCacheMqProducer {
             producer.start();
             log.info("DelCache RocketMq producer start!");
         } catch (MQClientException e) {
-            log.error("DelCache RocketMq producer启动异常 错误信息 : ",e);
+            log.error("DelCache RocketMq producer启动异常 错误信息 : ", e);
         }
     }
 

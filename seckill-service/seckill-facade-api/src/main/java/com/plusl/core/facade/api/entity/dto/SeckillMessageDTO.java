@@ -1,15 +1,16 @@
-package com.plusl.framework.common.dto;
+package com.plusl.core.facade.api.entity.dto;
 
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
  * @program: seckill-parent
- * @description: UserId GoodsId
+ * @description: 秒杀信息传输类
  * @author: PlusL
  * @create: 2022-07-09 14:36
  **/
@@ -22,11 +23,13 @@ public class SeckillMessageDTO implements Serializable {
     /**
      * 用户实体
      */
+    @NotNull(message = "用户实体不能为空")
     private User user;
 
     /**
      * 商品ID
      */
+    @NotNull(message = "商品ID不能为空")
     private Long goodsId;
 
 }

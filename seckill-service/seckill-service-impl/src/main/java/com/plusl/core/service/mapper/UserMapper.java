@@ -1,6 +1,7 @@
 package com.plusl.core.service.mapper;
 
-import com.plusl.framework.common.entity.User;
+
+import com.plusl.core.facade.api.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,13 +1,13 @@
 package com.plusl.core.service.rocketmq.seckill;
 
 import com.alibaba.fastjson.JSON;
+import com.plusl.core.facade.api.entity.User;
 import com.plusl.core.service.GoodsService;
 import com.plusl.core.service.OrderService;
 import com.plusl.core.service.SeckillService;
 import com.plusl.core.service.rocketmq.delcache.DelCacheMqProducer;
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.dto.SeckillMessageDTO;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
+import com.plusl.core.facade.api.entity.dto.SeckillMessageDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -87,8 +87,8 @@ public class SeckillMqConsumer implements RocketMQListener<String> {
      * @param goodsId 商品ID
      */
     private void deleteRedisStockCache(long goodsId) {
-        // TODO: 单纯的删除不足以保证健壮性，可以采用第一次删除后发送到消息队列中再删一次，如果队列积压数据不多的话可以很快完成第二次删缓存。为防止删除失败可以
-        //  利用 canal 订阅 MySQL binlog 日志监听写请求删除对应缓存
+        // TODO: 单纯的删除不足以保证健壮性，可以采用第一次删除后发送到消息队列中再删一次，
+        //  如果队列积压数据不多的话可以很快完成第二次删缓存。为防止删除失败的可能
         boolean stepOne = goodsService.delStockCountCache(goodsId);
         // 延时双删
 //        cachedThreadPool.execute(new delCacheByThread(goodsId));

@@ -1,6 +1,6 @@
 package com.plusl.web.vo;
 
-import com.plusl.framework.common.entity.OrderInfo;
+import com.plusl.core.facade.api.entity.OrderInfo;
 import lombok.Getter;
 import lombok.Setter;
 

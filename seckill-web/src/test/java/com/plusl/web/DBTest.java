@@ -1,5 +1,6 @@
 package com.plusl.web;
 
+import com.plusl.core.facade.api.entity.dto.UserWithTokenDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,17 +24,6 @@ public class DBTest {
     @Value(value = "${spring.datasource.driver-class-name}")
     private String cache;
 
-    @Test
-    public void testMySQLDB() {
-//        User user0 = userMapper.getByNickname("user0");
-//        System.out.println(JSONObject.toJSONString(user0));
-//
-//        GoodsDO goodsDoByGoodsId = goodsMapper.getGoodsDoByGoodsId(1);
-//        System.out.println(JSONObject.toJSONString(goodsDoByGoodsId));
-
-//        List<GoodsVo> list = goodsService.listGoodsVo();
-//        System.out.println(list);
-    }
 
     @Test
     public void testUserService() {
@@ -44,5 +34,11 @@ public class DBTest {
     @Test
     public void testApollo() {
         System.out.println(cache);
+    }
+
+    @Test
+    public void testValidation() {
+        UserWithTokenDTO userWithTokenDTO = new UserWithTokenDTO();
+
     }
 }

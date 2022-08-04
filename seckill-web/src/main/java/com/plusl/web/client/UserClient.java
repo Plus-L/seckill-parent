@@ -2,9 +2,9 @@ package com.plusl.web.client;
 
 import com.plusl.core.facade.api.UserFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
-import com.plusl.framework.common.dto.UserLoginDTO;
-import com.plusl.framework.common.dto.UserWithTokenDTO;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.UserLoginDTO;
+import com.plusl.core.facade.api.entity.dto.UserWithTokenDTO;
+import com.plusl.core.facade.api.entity.User;
 import com.plusl.web.utils.Assert;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;

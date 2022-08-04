@@ -2,11 +2,11 @@ package com.plusl.core.service.impl;
 
 
 import cn.hutool.core.util.ObjectUtil;
+import com.plusl.core.facade.api.entity.User;
 import com.plusl.core.service.UserService;
 import com.plusl.core.service.mapper.UserMapper;
-import com.plusl.framework.common.dto.UserLoginDTO;
-import com.plusl.framework.common.dto.UserWithTokenDTO;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.UserLoginDTO;
+import com.plusl.core.facade.api.entity.dto.UserWithTokenDTO;
 import com.plusl.framework.common.exception.GlobalException;
 import com.plusl.framework.common.utils.UUIDUtil;
 import com.plusl.framework.redis.RedisKeyUtils;

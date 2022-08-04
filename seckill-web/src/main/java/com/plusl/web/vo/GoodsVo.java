@@ -1,6 +1,6 @@
 package com.plusl.web.vo;
 
-import com.plusl.framework.common.entity.Goods;
+import com.plusl.core.facade.api.entity.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

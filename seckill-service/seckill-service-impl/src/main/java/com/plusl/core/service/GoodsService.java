@@ -1,7 +1,8 @@
 package com.plusl.core.service;
 
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.SeckillGoods;
+import com.plusl.core.facade.api.entity.SeckillGoods;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
+
 
 import java.util.List;
 

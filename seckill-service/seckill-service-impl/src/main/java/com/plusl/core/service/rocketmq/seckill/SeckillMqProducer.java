@@ -2,7 +2,7 @@ package com.plusl.core.service.rocketmq.seckill;
 
 import com.alibaba.fastjson.JSON;
 import com.plusl.core.service.rocketmq.RocketMqConfig;
-import com.plusl.framework.common.dto.SeckillMessageDTO;
+import com.plusl.core.facade.api.entity.dto.SeckillMessageDTO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -52,7 +52,7 @@ public class SeckillMqProducer {
 
     public void sendSeckillMessage(SeckillMessageDTO seckillMessageDTO) {
         String msg = JSON.toJSONString(seckillMessageDTO);
-        logger.info("Seckill-queue send message:" + msg);
+        logger.info("Seckill-queue send message : " + msg);
         //在使用convertAndSend时，需要指定destination（此处为seckill_queue），否则报错：No default destination
         rocketMqTemplate.convertAndSend(RocketMqConfig.SECKILL_QUEUE, msg);
     }

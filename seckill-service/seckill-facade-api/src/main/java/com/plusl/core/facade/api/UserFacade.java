@@ -1,9 +1,9 @@
 package com.plusl.core.facade.api;
 
 import com.plusl.core.facade.api.entity.FacadeResult;
-import com.plusl.framework.common.dto.UserLoginDTO;
-import com.plusl.framework.common.dto.UserWithTokenDTO;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.User;
+import com.plusl.core.facade.api.entity.dto.UserLoginDTO;
+import com.plusl.core.facade.api.entity.dto.UserWithTokenDTO;
 
 
 /**
@@ -14,12 +14,36 @@ import com.plusl.framework.common.entity.User;
  **/
 public interface UserFacade {
 
+    /**
+     * 验证密码并登录
+     *
+     * @param userLoginDTO 用户登录DTO
+     * @return FacadeResult封装用户+token DTO
+     */
     FacadeResult<UserWithTokenDTO> checkPasswordAndLogin(UserLoginDTO userLoginDTO);
 
+    /**
+     * 创建token
+     *
+     * @param userLoginDTO 用户登录DTO
+     * @return token
+     */
     FacadeResult<String> createToken(UserLoginDTO userLoginDTO);
 
+    /**
+     * 通过token获取用户
+     *
+     * @param token token
+     * @return 用户实体
+     */
     FacadeResult<User> getUserByToken(String token);
 
+    /**
+     * 通过用户名获取用户
+     *
+     * @param nickName 用户名/手机号
+     * @return 用户实体
+     */
     FacadeResult<User> getUserByNickName(String nickName);
 
 }

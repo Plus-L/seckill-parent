@@ -1,7 +1,7 @@
 package com.plusl.web.controller;
 
-import com.plusl.framework.common.dto.UserLoginDTO;
-import com.plusl.framework.common.dto.UserWithTokenDTO;
+import com.plusl.core.facade.api.entity.dto.UserLoginDTO;
+import com.plusl.core.facade.api.entity.dto.UserWithTokenDTO;
 import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.web.vo.LoginVo;
 import com.plusl.web.client.UserClient;
@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ import static com.plusl.framework.redis.constant.RedisConstant.USER_EXPIRE_TIME;
  * @author: PlusL
  * @create: 2022-07-05 17:24
  **/
+@Validated
 @Controller
 @RequestMapping("/login")
 public class LoginController {
@@ -38,12 +40,6 @@ public class LoginController {
     @Autowired
     private UserClient userClient;
 
-
-    @RequestMapping("/to_login")
-    public String tologin(LoginVo loginVo, Model model) {
-        LOGGER.info(loginVo.toString());
-        return "login";
-    }
 
     @PostMapping("/do_login")
     @ResponseBody
@@ -57,7 +53,6 @@ public class LoginController {
         response.addCookie(cookie);
         return CommonResult.success(userWithTokenDTO);
     }
-
 
     @GetMapping("/create_token")
     @ResponseBody

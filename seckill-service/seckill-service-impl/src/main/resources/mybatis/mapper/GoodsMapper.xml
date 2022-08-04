@@ -18,7 +18,7 @@
 
     <sql id="base_column">
         goods_id, goods_name, goods_title, goods_img, goods_detail, goods_price, goods_stock,stock_count,start_date
-  	,end_date,seckill_price
+        ,end_date,seckill_price
     </sql>
     <select id="listGoodsDo" resultMap="BaseResultMap">
         select
@@ -33,7 +33,7 @@
         WHERE seckill_goods.goods_id = #{goodsId}
     </select>
 
-    <update id="reduceOneStock" parameterType="com.plusl.framework.common.entity.SeckillGoods">
+    <update id="reduceOneStock" parameterType="com.plusl.core.facade.api.entity.SeckillGoods">
         update seckill_goods
         <set>
             stock_count = stock_count - 1

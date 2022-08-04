@@ -2,13 +2,13 @@ package com.plusl.core.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
+import com.plusl.core.facade.api.entity.OrderInfo;
+import com.plusl.core.facade.api.entity.SeckillOrder;
+import com.plusl.core.facade.api.entity.User;
 import com.plusl.core.service.OrderService;
 import com.plusl.core.service.mapper.OrderMapper;
 import com.plusl.core.service.util.SnowflakeIdWorker;
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.OrderInfo;
-import com.plusl.framework.common.entity.SeckillOrder;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import com.plusl.framework.redis.RedisKeyUtils;
 import com.plusl.framework.redis.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;

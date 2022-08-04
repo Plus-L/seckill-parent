@@ -1,7 +1,7 @@
 package com.plusl.core.service.convert.user;
 
-import com.plusl.framework.common.dto.UserLoginDTO;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.User;
+import com.plusl.core.facade.api.entity.dto.UserLoginDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

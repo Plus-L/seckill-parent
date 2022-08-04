@@ -7,9 +7,9 @@ import com.alibaba.fastjson.JSON;
 import com.plusl.core.facade.api.SeckillFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
 import com.plusl.core.service.SeckillService;
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.OrderInfo;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
+import com.plusl.core.facade.api.entity.OrderInfo;
+import com.plusl.core.facade.api.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +47,17 @@ public class SeckillFacadeImpl implements SeckillFacade {
         }
     }
 
+    @Override
+    public FacadeResult<Long> getSeckillResult(Long userId, Long goodsId) {
+        try {
+            Long seckillResult = seckillService.getSeckillResult(userId, goodsId);
+            return FacadeResult.success(seckillResult);
+        } catch (Exception e) {
+            log.warn("方法 [getSeckillResult] 异常 异常信息：", e);
+            return FacadeResult.fail(GET_RESULT_ERROR.getCode(), GET_RESULT_ERROR.getMessage());
+        }
+    }
+
     public FacadeResult blockHandlerForCreateOrderAndReduceStock(User user, GoodsDTO goodsDTO, BlockException e) {
         FacadeResult facadeResult = fail();
         log.warn("创建订单并减少库存 触发流控 请求信息 : {} {} 返回信息 : {}", JSON.toJSONString(user), JSON.toJSONString(goodsDTO), JSON.toJSONString(facadeResult), e);
@@ -57,17 +68,6 @@ public class SeckillFacadeImpl implements SeckillFacade {
         FacadeResult facadeResult = fail();
         log.warn("创建订单并减少库存 触发熔断降级 请求信息 : {} {} 返回信息 : {}", JSON.toJSONString(user), JSON.toJSONString(goodsDTO), JSON.toJSONString(facadeResult), throwable);
         return facadeResult;
-    }
-
-    @Override
-    public FacadeResult<Long> getSeckillResult(Long userId, Long goodsId) {
-        try {
-            Long seckillResult = seckillService.getSeckillResult(userId, goodsId);
-            return FacadeResult.success(seckillResult);
-        } catch (Exception e) {
-            log.warn("方法 [getSeckillResult] 异常 异常信息：", e);
-            return FacadeResult.fail(GET_RESULT_ERROR.getCode(), GET_RESULT_ERROR.getMessage());
-        }
     }
 
     private FacadeResult fail() {

@@ -1,8 +1,8 @@
 package com.plusl.web.controller;
 
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.dto.SeckillMessageDTO;
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
+import com.plusl.core.facade.api.entity.dto.SeckillMessageDTO;
+import com.plusl.core.facade.api.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.web.client.GoodsClient;
@@ -26,7 +26,7 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/activity")
-public class SeckillController implements InitializingBean {
+public class SeckillController {
 
     @Autowired
     GoodsClient goodsClient;
@@ -37,8 +37,6 @@ public class SeckillController implements InitializingBean {
     @Autowired
     RocketMqClient rocketMqClient;
 
-    @Autowired
-    OrderClient orderClient;
 
     /**
      * 执行秒杀，异步请求秒杀
@@ -48,7 +46,7 @@ public class SeckillController implements InitializingBean {
      * @param goodsId 商品ID
      * @return 规范化Json返回值
      */
-    @RequireLogin(seconds = 5, maxCount = 5, needLogin = true)
+    @RequireLogin
     @PostMapping(value = "/doseckill")
     public CommonResult<String> doSeckill(@RequestBody User user, @RequestParam("goodsId") Long goodsId) {
 
@@ -57,8 +55,6 @@ public class SeckillController implements InitializingBean {
         if (order != null) {
             return CommonResult.error(REPEATE_SECKILL);
         }*/
-
-        //TODO: 如何保证数据库与缓存的一致性
 
         SeckillMessageDTO seckillMessageDTO = new SeckillMessageDTO();
         seckillMessageDTO.setGoodsId(goodsId);
@@ -70,16 +66,13 @@ public class SeckillController implements InitializingBean {
     /**
      * 获取秒杀结果
      *
-     * @param model   模板
      * @param user    用户实体
      * @param goodsId 商品Id
      * @return 秒杀结果 成功返回订单ID  失败：（1）.商品库存空失败-返回0 （2）.异常导致失败-返回-1
      */
-    @RequireLogin(seconds = 5, maxCount = 5, needLogin = false)
+    @RequireLogin
     @GetMapping(value = "/result")
-    public CommonResult<String> getSeckillResult(Model model, User user,
-                                                 @RequestParam("goodsId") long goodsId) {
-        model.addAttribute("user", user);
+    public CommonResult<String> getSeckillResult(User user, @RequestParam("goodsId") long goodsId) {
         Long resultCode = seckillClient.getSeckillResult(user.getId(), goodsId);
         if (resultCode.equals(0L)) {
             return CommonResult.error(ResultStatus.SECKILL_OVER);
@@ -94,7 +87,7 @@ public class SeckillController implements InitializingBean {
     /**
      * 系统初始化时执行，启动时将数据库中的秒杀商品数量加载到缓存中来
      */
-    @Override
+    @PostConstruct
     public void afterPropertiesSet() {
         List<GoodsDTO> goodsList = goodsClient.getGoodsDTOList();
         for (GoodsDTO goodsDTO : goodsList) {

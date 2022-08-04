@@ -1,9 +1,10 @@
 package com.plusl.core.service.convert.goods;
 
 
+import com.plusl.core.facade.api.entity.SeckillGoods;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import com.plusl.core.service.dataobject.GoodsDO;
-import com.plusl.framework.common.dto.GoodsDTO;
-import com.plusl.framework.common.entity.SeckillGoods;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -30,7 +31,6 @@ public interface GoodsMapStruct {
     GoodsDTO convert(GoodsDO goodsDO);
 
 
-
     /**
      * GoodsDO -> SeckillGoods
      *
@@ -47,8 +47,6 @@ public interface GoodsMapStruct {
      * @return DTO列表
      */
     List<GoodsDTO> convertListDOtoDTO(List<GoodsDO> goodsDOList);
-
-
 
 
 }

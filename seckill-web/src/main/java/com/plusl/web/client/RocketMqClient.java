@@ -2,7 +2,7 @@ package com.plusl.web.client;
 
 import com.plusl.core.facade.api.RocketMqFacade;
 import com.plusl.core.facade.api.entity.FacadeResult;
-import com.plusl.framework.common.dto.SeckillMessageDTO;
+import com.plusl.core.facade.api.entity.dto.SeckillMessageDTO;
 import com.plusl.web.utils.Assert;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.plusl.core.facade.api;
 
 import com.plusl.core.facade.api.entity.FacadeResult;
-import com.plusl.framework.common.dto.SeckillMessageDTO;
+import com.plusl.core.facade.api.entity.dto.SeckillMessageDTO;
 
 /**
  * @program: seckill-framework
@@ -11,5 +11,11 @@ import com.plusl.framework.common.dto.SeckillMessageDTO;
  **/
 public interface RocketMqFacade {
 
+    /**
+     * 发送MQ信息
+     *
+     * @param seckillMessageDTO 秒杀信息传输类
+     * @return Facade结果封装
+     */
     FacadeResult<String> sendSeckillMessage(SeckillMessageDTO seckillMessageDTO);
 }

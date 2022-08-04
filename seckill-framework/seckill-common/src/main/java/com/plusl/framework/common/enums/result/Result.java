@@ -6,10 +6,11 @@ import java.io.Serializable;
 
 /**
  * @program: seckill-parent
- * @description: 规范返回结果
+ * @description: 规范返回结果  已过时，不再建议使用
  * @author: PlusL
  * @create: 2022-07-05 15:36
  **/
+@Deprecated
 public class Result<T> extends AbstractResult implements Serializable {
 
     private T data;

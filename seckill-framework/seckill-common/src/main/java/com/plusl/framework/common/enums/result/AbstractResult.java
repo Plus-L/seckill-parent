@@ -9,6 +9,7 @@ import com.plusl.framework.common.enums.status.ResultStatus;
  * @author: PlusL
  * @create: 2022-07-05 15:23
  **/
+@Deprecated
 public class AbstractResult {
     private ResultStatus resultStatus;
     private String code;

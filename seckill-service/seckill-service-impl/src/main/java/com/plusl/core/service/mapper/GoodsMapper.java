@@ -1,7 +1,7 @@
 package com.plusl.core.service.mapper;
 
+import com.plusl.core.facade.api.entity.SeckillGoods;
 import com.plusl.core.service.dataobject.GoodsDO;
-import com.plusl.framework.common.entity.SeckillGoods;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,4 +1,4 @@
-package com.plusl.framework.common.entity;
+package com.plusl.core.facade.api.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,16 +27,19 @@ public class OrderInfo implements Serializable {
     /**
      * ID
      */
+    @NotBlank(message = "订单ID不能为空")
     private Long id;
 
     /**
      * 用户ID
      */
+    @NotBlank(message = "用户ID不能为空")
     private Long userId;
 
     /**
      * 商品ID
      */
+    @NotBlank(message = "商品ID不能为空")
     private Long goodsId;
 
     /**
@@ -50,6 +55,7 @@ public class OrderInfo implements Serializable {
     /**
      * 商品数量
      */
+    @NotNull(message = "商品数量不能为空")
     private Integer goodsCount;
 
     /**

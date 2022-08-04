@@ -1,6 +1,6 @@
 package com.plusl.core.service.dataobject;
 
-import com.plusl.framework.common.entity.Goods;
+import com.plusl.core.facade.api.entity.Goods;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 

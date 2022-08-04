@@ -1,11 +1,9 @@
 package com.plusl.core.service.impl;
 
 import com.plusl.core.service.GoodsService;
-import com.plusl.framework.common.dto.GoodsDTO;
-import org.junit.jupiter.api.Assertions;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 

@@ -1,7 +1,7 @@
 package com.plusl.web.config;
 
-import com.plusl.framework.common.entity.User;
-import com.plusl.framework.common.utils.UserContext;
+import com.plusl.core.facade.api.entity.User;
+import com.plusl.web.utils.UserContext;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.support.WebDataBinderFactory;

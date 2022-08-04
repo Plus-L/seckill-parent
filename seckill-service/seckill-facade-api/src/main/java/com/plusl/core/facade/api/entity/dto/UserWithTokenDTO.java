@@ -1,11 +1,12 @@
-package com.plusl.framework.common.dto;
+package com.plusl.core.facade.api.entity.dto;
 
-import com.plusl.framework.common.entity.User;
+import com.plusl.core.facade.api.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -22,13 +23,13 @@ public class UserWithTokenDTO implements Serializable {
     /**
      * 用户实体
      */
-    @NotEmpty
+    @NotNull(message = "用户实体不能为空")
     private User user;
 
     /**
      * token
      */
-    @NotEmpty
+    @NotEmpty(message = "token不能为空")
     private String token;
 
 }
