@@ -6,7 +6,7 @@ import com.plusl.core.facade.api.entity.User;
 import com.plusl.framework.common.enums.result.CommonResult;
 import com.plusl.framework.common.enums.status.ResultStatus;
 import com.plusl.web.utils.UserContext;
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.redis.RedisService;
 import com.plusl.web.client.UserClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +36,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     UserClient userClient;
 
     @Autowired
-    RedisUtil redisUtil;
+    RedisService redisService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
@@ -56,6 +56,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
         } catch (Exception e) {
             log.error("方法 [loginInterceptor] 捕获异常 : ", e);
+            return false;
         }
         return true;
     }

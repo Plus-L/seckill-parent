@@ -28,7 +28,7 @@ public class OrderClient {
         return result.getData();
     }
 
-    public SeckillOrder preventRepeatedSeckill(Long userId, Long goodsId) {
+    public SeckillOrder getSeckillOrderByUserIdGoodsId(Long userId, Long goodsId) {
         FacadeResult<SeckillOrder> result = orderFacade.getSeckillOrderByUserIdGoodsId(userId, goodsId);
         Assert.isSuccess(result);
         return result.getData();

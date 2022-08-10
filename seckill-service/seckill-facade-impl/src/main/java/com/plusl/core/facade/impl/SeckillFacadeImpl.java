@@ -15,6 +15,8 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.plusl.framework.common.constant.CommonConstant.SECKILL_IN_LINE;
+import static com.plusl.framework.common.constant.CommonConstant.SECKILL_SOLD_OUT;
 import static com.plusl.framework.common.enums.status.ResultStatus.*;
 
 /**
@@ -48,9 +50,9 @@ public class SeckillFacadeImpl implements SeckillFacade {
     }
 
     @Override
-    public FacadeResult<Long> getSeckillResult(Long userId, Long goodsId) {
+    public FacadeResult<String> getSeckillResult(Long userId, Long goodsId) {
         try {
-            Long seckillResult = seckillService.getSeckillResult(userId, goodsId);
+            String seckillResult = seckillService.getSeckillResult(userId, goodsId);
             return FacadeResult.success(seckillResult);
         } catch (Exception e) {
             log.warn("方法 [getSeckillResult] 异常 异常信息：", e);

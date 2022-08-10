@@ -10,7 +10,7 @@ import com.plusl.core.facade.api.entity.dto.UserWithTokenDTO;
 import com.plusl.framework.common.exception.GlobalException;
 import com.plusl.framework.common.utils.UUIDUtil;
 import com.plusl.framework.redis.RedisKeyUtils;
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Autowired
-    RedisUtil redisUtil;
+    RedisService redisService;
 
     @Override
     public UserWithTokenDTO checkPasswordAndLogin(UserLoginDTO userLoginDTO) {
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         //生成cookie 将session返回游览器 分布式session
         String token = UUIDUtil.uuid();
 
-        redisUtil.set(RedisKeyUtils.getPrefixUserToken(token), user, USER_EXPIRE_TIME);
+        redisService.set(RedisKeyUtils.getPrefixUserToken(token), user, USER_EXPIRE_TIME);
         UserWithTokenDTO userWithTokenDTO = new UserWithTokenDTO();
         userWithTokenDTO.setUser(user);
         userWithTokenDTO.setToken(token);
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
         }
         //生成cookie 将session返回游览器 分布式session
         String token = UUIDUtil.uuid();
-        redisUtil.set(RedisKeyUtils.getPrefixUserToken(token), user, USER_EXPIRE_TIME);
+        redisService.set(RedisKeyUtils.getPrefixUserToken(token), user, USER_EXPIRE_TIME);
         return token;
     }
 
@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
             log.warn("方法 [getUserByToken] 传入token为空");
             return null;
         }
-        User user = redisUtil.get(RedisKeyUtils.getPrefixUserToken(token), User.class);
+        User user = redisService.get(RedisKeyUtils.getPrefixUserToken(token), User.class);
         if (ObjectUtil.isEmpty(user)) {
             log.warn("方法 [getUserByToken] 通过token读Redis为空");
             return null;
@@ -107,14 +107,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByNickName(String nickName) {
         //取缓存
-        User user = redisUtil.get(RedisKeyUtils.getPrefixUserByName(nickName), User.class);
+        User user = redisService.get(RedisKeyUtils.getPrefixUserByName(nickName), User.class);
         if (user != null) {
             return user;
         }
         //取数据库
         user = userMapper.getByNickname(nickName);
         if (user != null) {
-            redisUtil.set(RedisKeyUtils.getPrefixUserByName(nickName), user, USER_EXPIRE_TIME);
+            redisService.set(RedisKeyUtils.getPrefixUserByName(nickName), user, USER_EXPIRE_TIME);
         }
         return user;
     }

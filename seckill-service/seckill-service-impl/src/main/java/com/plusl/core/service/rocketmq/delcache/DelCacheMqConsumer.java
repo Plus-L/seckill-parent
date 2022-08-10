@@ -1,7 +1,7 @@
 package com.plusl.core.service.rocketmq.delcache;
 
 import com.plusl.core.service.GoodsService;
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -19,9 +19,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RocketMQMessageListener(topic = "delcache_queue", consumerGroup = "delcache_queue")
 public class DelCacheMqConsumer implements RocketMQListener<String> {
-
-    @Autowired
-    RedisUtil redisUtil;
 
     @Autowired
     GoodsService goodsService;

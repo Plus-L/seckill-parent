@@ -14,10 +14,11 @@ import java.util.List;
 
 /**
  * @author LJH
+ * 被Spring管理的一般不会是工具类
  */
 @Component
 @Slf4j
-public class RedisUtil {
+public class RedisService {
 
     @Autowired
     JedisPool jedisPool;

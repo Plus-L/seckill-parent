@@ -28,8 +28,8 @@ public class SeckillClient {
         return result.getData();
     }
 
-    public Long getSeckillResult(Long userId, Long goodsId) {
-        FacadeResult<Long> result = seckillFacade.getSeckillResult(userId, goodsId);
+    public String getSeckillResult(Long userId, Long goodsId) {
+        FacadeResult<String> result = seckillFacade.getSeckillResult(userId, goodsId);
         Assert.isSuccess(result);
         return result.getData();
     }

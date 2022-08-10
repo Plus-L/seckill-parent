@@ -38,9 +38,11 @@ public class SeckillWebApplication {
 
     private static void initFolwRule() {
         FlowRule flowRule = new FlowRule();
+        //绑定资源
         flowRule.setResource(RES_KEY);
+        //设置阈值
         flowRule.setCount(5);
-
+        //限流类型：QPS
         flowRule.setGrade(RuleConstant.FLOW_GRADE_QPS);
         flowRule.setLimitApp("default");
         FlowRuleManager.loadRules(Collections.singletonList(flowRule));

@@ -69,6 +69,7 @@ public class SeckillMqConsumer implements RocketMQListener<String> {
         GoodsDTO goods = goodsService.getGoodsDtoByGoodsId(goodsId);
 
         int stock = goods.getStockCount();
+        // 没必要判断库存，使用的乐观锁
         if (stock <= 0) {
             return;
         }

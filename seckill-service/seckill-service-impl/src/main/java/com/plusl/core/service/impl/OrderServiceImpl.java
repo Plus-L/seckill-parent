@@ -10,7 +10,7 @@ import com.plusl.core.service.mapper.OrderMapper;
 import com.plusl.core.service.util.SnowflakeIdWorker;
 import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import com.plusl.framework.redis.RedisKeyUtils;
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.redis.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     OrderMapper orderMapper;
 
     @Autowired
-    RedisUtil redisUtil;
+    RedisService redisService;
 
     @Override
     public OrderInfo getOrderById(Long orderId) {
@@ -47,19 +47,18 @@ public class OrderServiceImpl implements OrderService {
         //TODO：直接取数据库可能导致服务崩掉的问题，解决方法如加到缓存，加入到缓存还有缓存击穿的问题需要考虑
         // 决定采用缓存手段，第一此方法会被重复调用用来判断用户是否是重复秒杀，第二用户在购买后很有可能的操作是直接查看订单信息
         String prefixSeckillOrder = RedisKeyUtils.getPrefixSeckillOrder(userId, goodsId);
-        SeckillOrder seckillOrder = redisUtil.get(prefixSeckillOrder, SeckillOrder.class);
+        SeckillOrder seckillOrder = redisService.get(prefixSeckillOrder, SeckillOrder.class);
         if (!ObjectUtil.isEmpty(seckillOrder)) {
             return seckillOrder;
-        } else {
-            SeckillOrder seckillOrderByDB = orderMapper.getSeckillOrderByUserIdGoodsId(userId, goodsId);
-            redisUtil.setnx(prefixSeckillOrder, JSON.toJSONString(seckillOrderByDB));
-            return seckillOrderByDB;
         }
+        SeckillOrder seckillOrderByDB = orderMapper.getSeckillOrderByUserIdGoodsId(userId, goodsId);
+        redisService.setnx(prefixSeckillOrder, JSON.toJSONString(seckillOrderByDB));
+        return seckillOrderByDB;
     }
 
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ, rollbackFor = Exception.class)
     public OrderInfo createOrder(User user, GoodsDTO goods) {
         OrderInfo orderInfo = new OrderInfo();
 
@@ -83,8 +82,9 @@ public class OrderServiceImpl implements OrderService {
         seckillOrder.setUserId(user.getId());
         orderMapper.insertSeckillOrder(seckillOrder);
 
-        redisUtil.set(RedisKeyUtils.getPrefixSeckillOrder(user.getId(), goods.getGoodsId()),
-                seckillOrder, DEFAULT_EXPIRE_TIME);
+        // TODO: 从事务中抽离出去，此处如果发生回滚会出现数据库一致性的问题，因为前面查的是先查缓存后查数据库。要预防超时等问题
+//        redisService.set(RedisKeyUtils.getPrefixSeckillOrder(user.getId(), goods.getGoodsId()),
+//                seckillOrder, DEFAULT_EXPIRE_TIME);
 
         return orderInfo;
     }

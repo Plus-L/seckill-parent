@@ -31,7 +31,7 @@ public interface SeckillFacade {
      * 成功-返回订单ID
      * 失败 库存空-返回(0)；异常失败-返回(-1)
      */
-    FacadeResult<Long> getSeckillResult(Long userId, Long goodsId);
+    FacadeResult<String> getSeckillResult(Long userId, Long goodsId);
 
 
 }

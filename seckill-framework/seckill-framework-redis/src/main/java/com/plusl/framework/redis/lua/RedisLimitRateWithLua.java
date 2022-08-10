@@ -1,6 +1,6 @@
 package com.plusl.framework.redis.lua;
 
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.redis.RedisService;
 import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
@@ -17,9 +17,8 @@ import java.util.List;
 public class RedisLimitRateWithLua {
     public static boolean accquire() throws IOException, URISyntaxException {
 
-        //TODO: 注意每次访问都需要创建一个Redis对象的情况，redis容易爆满
-        RedisUtil redisUtil = new RedisUtil();
-        Jedis jedis = redisUtil.getJedisObject();
+        RedisService redisService = new RedisService();
+        Jedis jedis = redisService.getJedisObject();
 
         //限流Key 每秒一个；设置的限流大小：1；限流Key过期时间：2s
         String lua =

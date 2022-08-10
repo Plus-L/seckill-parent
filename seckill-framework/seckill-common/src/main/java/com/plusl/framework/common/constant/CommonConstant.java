@@ -14,4 +14,10 @@ public class CommonConstant {
      */
     public static final String COOKIE_NAME_TOKEN = "TOKEN";
 
+    public static final String SECKILL_SECCESS = "Seckill_Success";
+
+    public static final String SECKILL_IN_LINE = "Seckill_In_Line";
+
+    public static final String SECKILL_SOLD_OUT = "Seckill_Sold_Out";
+
 }

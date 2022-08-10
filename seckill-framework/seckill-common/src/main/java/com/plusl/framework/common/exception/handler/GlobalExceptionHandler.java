@@ -37,6 +37,7 @@ import static com.plusl.framework.common.enums.status.ResultStatus.*;
 
 /**
  * 全局异常处理器，将 Exception 翻译成 CommonResult + 对应的异常编号
+ * @author LJH
  */
 @RestControllerAdvice
 @NoArgsConstructor

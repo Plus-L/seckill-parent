@@ -10,7 +10,7 @@ import com.plusl.core.service.mapper.GoodsMapper;
 import com.plusl.core.service.dataobject.GoodsDO;
 import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import com.plusl.framework.redis.RedisKeyUtils;
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class GoodsServiceImpl implements GoodsService {
     GoodsMapper goodsMapper;
 
     @Autowired
-    RedisUtil redisUtil;
+    RedisService redisService;
 
     @Override
     public List<GoodsDTO> listGoodsDTO() {
@@ -49,17 +49,17 @@ public class GoodsServiceImpl implements GoodsService {
         // 商品库存key
         String stockRedisKey = RedisKeyUtils.getSeckillGoodsStockPrefix(goodsId);
 
-        GoodsDTO goodsDTOByCache = redisUtil.get(goodsRedisKey, GoodsDTO.class);
+        GoodsDTO goodsDTOByCache = redisService.get(goodsRedisKey, GoodsDTO.class);
 
         if (ObjectUtil.isEmpty(goodsDTOByCache)) {
             // 缓存中未命中，查数据库并将商品对象加入缓存
             GoodsDTO goodsDTOByDB = GoodsMapStruct.INSTANCE.convert(goodsMapper.getGoodsDoByGoodsId(goodsId));
-            redisUtil.set(goodsRedisKey, goodsDTOByDB, NEVER_EXPIRE);
-            redisUtil.set(stockRedisKey, goodsDTOByDB.getStockCount(), NEVER_EXPIRE);
+            redisService.set(goodsRedisKey, goodsDTOByDB, NEVER_EXPIRE);
+            redisService.set(stockRedisKey, goodsDTOByDB.getStockCount(), NEVER_EXPIRE);
             return goodsDTOByDB;
         }
         // 获取商品时将该商品的当前最新库存给缓存进去
-        redisUtil.setnx(stockRedisKey, JSON.toJSONString(goodsDTOByCache.getStockCount()));
+        redisService.setnx(stockRedisKey, JSON.toJSONString(goodsDTOByCache.getStockCount()));
 
         return goodsDTOByCache;
     }
@@ -73,7 +73,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Boolean initSetGoodsMock(GoodsDTO goodsDTO) {
-        return redisUtil.set(RedisKeyUtils.getSeckillGoodsStockPrefix(goodsDTO.getGoodsId())
+        return redisService.set(RedisKeyUtils.getSeckillGoodsStockPrefix(goodsDTO.getGoodsId())
                 , goodsDTO.getStockCount(), NEVER_EXPIRE);
     }
 
@@ -86,8 +86,8 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Boolean delStockCountCache(Long goodsId) {
 
-        Boolean delGoodsIsSuccess = redisUtil.delete(RedisKeyUtils.getSeckillGoodsStockPrefix(goodsId));
-        Boolean delStockIsSuccess = redisUtil.delete(RedisKeyUtils.getSeckillGoodsPrefix(goodsId));
+        Boolean delGoodsIsSuccess = redisService.delete(RedisKeyUtils.getSeckillGoodsStockPrefix(goodsId));
+        Boolean delStockIsSuccess = redisService.delete(RedisKeyUtils.getSeckillGoodsPrefix(goodsId));
         log.info("删除商品ID:[{}] 实体缓存以及库存缓存", goodsId);
         return delStockIsSuccess && delGoodsIsSuccess;
     }

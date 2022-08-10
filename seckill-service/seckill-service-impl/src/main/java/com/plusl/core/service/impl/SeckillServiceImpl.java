@@ -1,19 +1,18 @@
 package com.plusl.core.service.impl;
 
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.alibaba.fastjson.JSON;
 import com.plusl.core.facade.api.entity.OrderInfo;
 import com.plusl.core.facade.api.entity.SeckillOrder;
 import com.plusl.core.facade.api.entity.User;
+import com.plusl.core.facade.api.entity.dto.GoodsDTO;
 import com.plusl.core.service.GoodsService;
 import com.plusl.core.service.OrderService;
 import com.plusl.core.service.SeckillService;
 import com.plusl.core.service.convert.goods.GoodsMapStruct;
 import com.plusl.core.service.rocketmq.seckill.SeckillMqProducer;
-import com.plusl.core.facade.api.entity.dto.GoodsDTO;
-import com.plusl.framework.redis.RedisKeyUtils;
-import com.plusl.framework.redis.RedisUtil;
+import com.plusl.framework.common.constant.CommonConstant;
+import com.plusl.framework.redis.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,14 +37,14 @@ public class SeckillServiceImpl implements SeckillService {
     OrderService orderService;
 
     @Autowired
-    RedisUtil redisUtil;
+    RedisService redisService;
 
     @Autowired
     SeckillMqProducer seckillMqProducer;
 
+    // TODO: 限流放到Facade层中，一般限制入口，不限制Service
     @Override
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.REPEATABLE_READ)
-    @SentinelResource(blockHandler = "blockHandlerForCreateOrderAndReduceStock", fallback = "fallBackForCreateOrderAndReduceStock")
     public OrderInfo createOrderAndReduceStock(User user, GoodsDTO goodsDTO) {
         //减库存 下订单 写入秒杀订单
         Long goodsId = goodsDTO.getGoodsId();
@@ -55,7 +54,7 @@ public class SeckillServiceImpl implements SeckillService {
             return orderService.createOrder(user, goodsDTO);
         }
 
-        //如果库存不存在则内存标记为true
+        // TODO : 日志要打在关键的地方，不要乱打，日志打多了对性能会产生影响
         log.warn("DB 扣除库存失败 用户ID : {} 商品ID : {}", user.getId(), goodsId);
         return null;
     }
@@ -73,21 +72,16 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
     @Override
-    public Long getSeckillResult(Long userId, Long goodsId) {
+    public String getSeckillResult(Long userId, Long goodsId) {
         SeckillOrder order = orderService.getSeckillOrderByUserIdGoodsId(userId, goodsId);
-        //秒杀成功
+        //TODO : 如何区分三种状态：1.排队中； 2.秒杀失败
         if (order != null) {
-            return order.getOrderId();
-        } else {
-            String s = redisUtil.get(RedisKeyUtils.getSeckillGoodsStockPrefix(goodsId));
-            int stock = Integer.parseInt(s);
-            // 库存大于0即表示异常结束，小于等于0则库存空退出
-            if (stock > 0) {
-                return -1L;
-            } else {
-                return 0L;
-            }
+            return CommonConstant.SECKILL_SECCESS;
         }
-    }
+        if (goodsService.getGoodsDtoByGoodsId(goodsId).getStockCount() <= 0) {
+            return CommonConstant.SECKILL_SOLD_OUT;
+        }
+        return CommonConstant.SECKILL_IN_LINE;
 
+    }
 }

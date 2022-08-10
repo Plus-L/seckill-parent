@@ -64,7 +64,7 @@ public enum ResultStatus {
     /**
      * 秒杀模块
      */
-    SECKILL_OVER("40001", "商品已经秒杀完毕"),
+    SECKILL_OVER("40001", "很抱歉，商品已经秒杀完了"),
     REPEATE_SECKILL("40002", "不能重复秒杀"),
     SECKILL_FAIL("40003", "秒杀失败"),
     GET_RESULT_ERROR("40004", "获取结果失败，请稍后再试"),
